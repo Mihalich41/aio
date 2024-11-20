@@ -4,17 +4,7 @@
   <meta charset="utf-8"> 
   <meta name="viewport"
     content="wiidth=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-      let tg = window.Telegram.WebApp;
-      let but1 = document.getElementById('but1');
-      let but2 = document.getElementById('but2');
-      let but3 = document.getElementById('but3'); 
 
-      but1.onclick = function() {
-        documen.getElementById('1').style.display = 'none';
-      }
-    </script>
   </head> 
   <body>
     
@@ -42,7 +32,17 @@
       <button id='but3'>кнопка3</button>
     </div>
 
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+      let tg = window.Telegram.WebApp;
+      let but1 = document.getElementById('but1');
+      let but2 = document.getElementById('but2');
+      let but3 = document.getElementById('but3'); 
 
+      but1.onclick = function() {
+        documen.getElementById('1').style.display = 'none';
+      }
+    </script>
     
   </body>
   
