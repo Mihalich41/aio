@@ -1,9 +1,4 @@
 
-
 body {background:green; text-align:center; font-family:sans-serif;}
 
-
-#div0 {display:block;}
-#div1 {display:none;}
-#div2 {display:none;}
-#div3 {display:none;}
+.div {display:none;}
