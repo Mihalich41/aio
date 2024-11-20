@@ -8,53 +8,106 @@
   </head> 
   <body>
 
-    <div id="div0">
-    <h1>Тест наs квартиру</h1>
-    <p>1</p>
-    <button id="but01">кнопка1</button>
-    <button id='but2'>кнопка2</button>
-    <button id='but3'>кнопка3</button>
+    <div id="div0" class="div">
+    <h1>"Первая инвестиционная недвижимость"</h1>
+      <h2>Игра которая меняет жизнь.</h2>
+    <p>Цель игры купить первую квартиру для сдачи в аренду.</p>
+    <p>Готов ли ты к путешествию в финансовую независимость?</p>
+    <p><button id="div3but">ВСЕГДА ГОТОВ</button></p>
+    <p><button id='div1but'>НЕ ХОЧУ</button></p>
     </div>
     
-    <div id="div1">
-    <h1>1</h1>
-    <p>1</p>
-    <button id="but11">кнопка1</button>
-    <button id='but2'>кнопка2</button>
-    <button id='but3'>кнопка3</button>
+    <div id="div1" class="div">
+      <h1>Тебе не до этого сейчас?</h1>
+        <h2>Понимаю.</h2>
+      <p>Если что возвращяйся.</p>
+      <p><button id='div2but'>Классный БОТ</button></p>
     </div>
 
-    <div id="div2">
-    <h1>2</h1>
-    <p>2</p>
-      <button id="but21">кнопка21</button>
-      <button id='but22'>кнопка2</button>
-      <button id='but32'>кнопка3</button>
+    <div id="div2" class="div">
+      <h1>Бот написан Квазимиллиардером</h1>
+        <h2>Единолично. Mindmap. CSS. HTML> etc</h2>
+      <p>Могу сделать на заказ или обучить основам по конкретной задаче</p>
+      <p>Бартер, агентские вознаграждения, идеи</p>
+      <p><button id=''>НАПИСАТЬ</button></p>
     </div>
 
-    <div id="div3">
-    <h1>3</h1>
-    <p>3</p>
-      <button id="but31">кнопка31</button>
-      <button id='but23'>кнопка2</button>
-      <button id='but33'>кнопка3</button>
+    <div id="div3" class="div">
+      <h1>Хорош, Важный шаг!</h1>
+        <h2>ЦЕЛЬ - КУПИТЬ КВАРТИРУ ДЛЯ СДАЧИ В АРЕНДУ</h2>
+      <p>в конце НОЯБРЯ 2024 квартира-студия 22м в САНКТ-ПЕТЕРБУРГЕ стоит 5.0м у застройщика SETL.</p>
+      <p>А на вторичке ее можно взять за 4.5м</p>
+      <p>Ключевая ставка 22%</p>
+      <h3>Сколько есть рублей у тебя?</h3>
+      <p><button id="div4but">4.000.000+</button></p>
+      <p><button id='div5but'>2.000.000</button></p>
+      <p><button id='div7but'>0</button></p>
+    </div>
+
+    <div id="div4" class="div">
+      <h1>Поздравляю! Ты победил!</h1>
+        <h2>ПРЯМО СЕЙЧАС МОЖЕШЬ ПРИОБРЕСТИ СЕБЕ КВАРТИРУ ПОД АРЕНДУ</h2>
+      <p>Знаешь, таких людей не много. У которых есть 4 мульта и желание купить квартиру-студию чтобы сдавать ее баксов за 200 в месяц. </p>
+ <p>Это застройщики могут хитрить - продавать за 5.0м и давать ипотеку 0-10%.</p>
+  <p>На вторичке ипотека от 25%. Дураку ее не дадут, а умный не возьмет. Есть на вторичке люди, которым деньги срочно надо. Они согласятся отдать за 4.0м.</p>
+      <p>С большой долей вероятности в 2025 такой цены не будет, инфляция неизбежна</p>
+      <p><button id='div2but'>Классный БОТ</button></p>
+    </div>
+
+
+    <div id="div5" class="div">
+      <h1>ВАУ! отлично!</h1>
+        <h2>Ты можешь выиграть сейчас!</h2>
+      <p>Можно продать лишнее, занять у знакомых, забрать долги, продать активы, пассивы, хлам</p>
+      <p>И хорошо бы откладывать более 50к каждый месяц</p>
+      <p><button id="div4but">Я наскребу 4.0м</button></p>
+      <p><button id='div6but'>Откладываю от 50к</button></p>
+      <p><button id='div7but'>Я преувеличил</button></p>
+    </div>
+
+    <div id="div6" class="div">
+      <h1>Откладывая от 50к в месяц</h1>
+        <h2>Можно накопить 600к за год</h2>
+      <p>А можно взять ипотеку под гигантский процент.</p>
+      <p>Вообщем, ты победил!</p>
+      <p><button id='div2but'>Классный БОТ</button></p>
+    </div>
+
+    <div id="div7" class="div">
+      <h1>от 0 до 1млн</h1>
+        <h2>Поздравляю с победой!</h2>
+      <p>Шансов купить квартиру у тебя стало больше после прохожения игры. И это победа.</p>
+      <p>Начинай экономить, откладывать, дополнительно зарабатывать</p>
+      <p><button id='div2but'>Классный БОТ</button></p>
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
       let tg = window.Telegram.WebApp;
-      let but1 = document.getElementById("but1");
-      let but2 = document.getElementById("but2");
-      let but3 = document.getElementById("but3"); 
+      let div1but = document.getElementById("div1but");
+      let div2but = document.getElementById("div2but");
+      let div3but = document.getElementById("div3but");
+      let div4but = document.getElementById("div4but");
+      let div5but = document.getElementById("div5but");
+      let div6but = document.getElementById("div6but");
+      let div7but = document.getElementById("div7but");
 
-      but01.addEventListener("click", () => {
-        document.getElementById("div0").style.display = "none";
+      div1but.addEventListener("click", () => {
+        document.getElementsByClassName("div").style.display = "none;
         document.getElementById("div1").style.display = "block";
       });
 
-      but11.addEventListener("click", () => {
-        document.getElementById("div1").style.display = "none";
+      div2but.addEventListener("click", () => {
+        document.getElementsByClassName("div").style.display = "none;
         document.getElementById("div2").style.display = "block";
+      });
+      div3but.addEventListener("click", () => {
+        document.getElementsByClassName("div").style.display = "none;
+        document.getElementById("div3").style.display = "block";
+      });
+      div4but.addEventListener("click", () => {
+        document.getElementsByClassName("div").style.display = "none;
+        document.getElementById("div4").style.display = "block";
       });
       
     </script>
