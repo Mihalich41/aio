@@ -5,12 +5,28 @@
   <meta name="viewport"
     content="wiidth=device-width, initial-scale=1.0">
 
+    <style>
+      #0 {display:block};
+      #1 {display:none};
+      #2 {display:none};
+      #3 {display:none};
+    </style>
+
   </head> 
   <body>
+
+    <div id="0">
+    <h1>Тест на квартиру</h1>
+    <p>1</p>
+    <button id="but01">кнопка1</button>
+    <button id='but2'>кнопка2</button>
+    <button id='but3'>кнопка3</button>
+    </div>
+    
     <div id="1">
     <h1>1</h1>
     <p>1</p>
-    <button id="but1">кнопка1</button>
+    <button id="but11">кнопка1</button>
     <button id='but2'>кнопка2</button>
     <button id='but3'>кнопка3</button>
     </div>
@@ -38,8 +54,14 @@
       let but2 = document.getElementById("but2");
       let but3 = document.getElementById("but3"); 
 
-      but1.addEventListener("click", () => {
+      but01.addEventListener("click", () => {
+        document.getElementById("0").style.display = "none";
+        document.getElementById("1").style.display = "block";
+      });
+
+      but11.addEventListener("click", () => {
         document.getElementById("1").style.display = "none";
+        document.getElementById("2").style.display = "block";
       });
       
     </script>
