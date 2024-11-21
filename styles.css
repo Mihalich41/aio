@@ -6,7 +6,7 @@ body {
 
 div {display:none;}
 
-p {font-size: 18px;}
+.panel p {font-size: 18px;}
 
 button {border:0;
 text-transform:uppercase;
