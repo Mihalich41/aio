@@ -88,52 +88,32 @@
       
       let buttons = document.querySelectorAll('button');
 			panels = document.querySelectorAll('.panel');
+      dividlink = document.querySelectorAll('.panel');
 
 buttons.forEach(button => {
-  button.addEventListener('click', e => {
+  button.addEventListener('click', iii => {
     panels.forEach(panel => {
-      panel.style.display = panel.id === e.target.dataset.panel ? 'block' : 'none';
+      panel.style.display = panel.id === iii.target.dataset.panel ? 'block' : 'none';
     });
   }); 
 });
 
-      div1but.addEventListener("click", () => {
-        document.getElementById("div1").style.display = "block";
-      });
-      div2but.addEventListener("click", () => {
-        document.getElementById("div2").style.display = "block";
-      });
-            div2but1.addEventListener("click", () => {
-        document.getElementById("div2").style.display = "block";
-      });
-            div2but2.addEventListener("click", () => {
-        document.getElementById("div2").style.display = "block";
-      });
-            div2but3.addEventListener("click", () => {
-        document.getElementById("div2").style.display = "block";
-      });
+buttons.forEach(button => {
+  button.addEventListener('click', e => {
+    dividlink.forEach(div => {
+ var str =  e.target.id;
+var strFirstThree = str.substring(0,4);
+//console.log(str); //hows '012123'
+//console.log(strFirstThree); // shows '012' можно писать diva divb или расширить до 5 div01
+ document.getElementById(strFirstThree).style.display = "block";
+    });
+  }); 
+});
+
       
-      div3but.addEventListener("click", () => {
-        document.getElementById("div3").style.display = "block";
-      });
-      div4but.addEventListener("click", () => {
-        document.getElementById("div4").style.display = "block";
-      });
-            div4but1.addEventListener("click", () => {
-        document.getElementById("div4").style.display = "block";
-      });
-           div5but.addEventListener("click", () => {
-        document.getElementById("div5").style.display = "block";
-      });
-      div6but.addEventListener("click", () => {
-        document.getElementById("div6").style.display = "block";
-      });
-      div7but.addEventListener("click", () => {
-        document.getElementById("div7").style.display = "block";
-      });
-            div7but1.addEventListener("click", () => {
-        document.getElementById("div7").style.display = "block";
-      });
+
+
+ 
       
     </script>
     
