@@ -4,9 +4,10 @@ body {
   color:var(--tg-theme-text-color)
    }
 
-div {display:none; font-size:20px;}
+
 div.panel p {font-size: 20px;}
-.panel {font-size: 20px;}
+
+h1 {font-size:0.5em;}
 
 button {border:0;
 text-transform:uppercase;
