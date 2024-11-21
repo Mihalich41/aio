@@ -1,5 +1,18 @@
-
-
-body {background:green; text-align:center; font-family:sans-serif;}
+body {
+  background:var(--tg-theme-bg-color); 
+  text-align:center; font-family:sans-serif;
+  color:var(--tg-theme-text-color)
+   }
 
 div {display:none;}
+
+button {border:0; 
+border-radius:5px;
+margin-top:50px;
+height:60px;
+width:200px;
+color:var(--tg-theme-button-text-color);
+background:var(--tg-theme-button-color);
+}
+
+button:hover {background:var(--tg-theme-secondary-bg-color);}
