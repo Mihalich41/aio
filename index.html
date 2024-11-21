@@ -84,16 +84,17 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
       let tg = window.Telegram.WebApp;
-      let div1but = document.getElementById("div1but");
-      let div2but = document.getElementById("div2but");
-      let div3but = document.getElementById("div3but");
-      let div4but = document.getElementById("div4but");
-      let div5but = document.getElementById("div5but");
-      let div6but = document.getElementById("div6but");
-      let div7but = document.getElementById("div7but");
+      div1but = document.getElementById("div1but");
+      div2but = document.getElementById("div2but");
+      div3but = document.getElementById("div3but");
+      div4but = document.getElementById("div4but");
+      div5but = document.getElementById("div5but");
+      div6but = document.getElementById("div6but");
+      div7but = document.getElementById("div7but");
+      tg.expand();
       
       let buttons = document.querySelectorAll('button');
-			let panels = document.querySelectorAll('.panel');
+			panels = document.querySelectorAll('.panel');
 
 buttons.forEach(button => {
   button.addEventListener('click', e => {
