@@ -16,7 +16,7 @@
             display: none;
         }
 
-        div.panel p {
+        div.panel p, div.panel h3 {
             font-size: 20px;
         }
 
@@ -58,7 +58,9 @@ const data = [
         h2: 'Игра которая меняет жизнь.',
         p: [
             'Цель игры купить первую квартиру для сдачи в аренду.',
-            'Готов ли ты к путешествию в финансовую независимость?'
+        ],
+        h3: [
+            'Готов ли ты к путешествию в финансовую независимость?' // Изменено на h3
         ],
         buttons: [
             { class: 'div3', text: 'ВСЕГДА ГОТОВ', dataPanel: '3' },
@@ -91,12 +93,14 @@ const data = [
             'В конце НОЯБРЯ 2024 квартира-студия 22м в САНКТ-ПЕТЕРБУРГЕ стоит 5.0м у застройщика SETL.',
             'А на вторичке ее можно взять за 4.5м',
             'Ключевая ставка 22%',
-            'Сколько есть рублей у тебя?'
+        ],
+        h3: [
+            'Сколько есть рублей у тебя?' // Изменено на h3
         ],
         buttons: [
             { class: 'div4', text: '4.000.000+', dataPanel: '4' },
             { class: 'div5', text: '2.000.000', dataPanel: '5' },
-            { class: 'div7', text: 'около 0', dataPanel: '7' }
+            { class: 'div7', text: '0', dataPanel: '7' }
         ]
     },
     {
@@ -165,10 +169,17 @@ data.forEach(item => {
     h2.textContent = item.h2;
     newDiv.appendChild(h2);
 
+    // Добавляем p и h3 элементы
     item.p.forEach(paragraphText => {
         const p = document.createElement('p');
         p.textContent = paragraphText;
         newDiv.appendChild(p);
+    });
+
+    item.h3?.forEach(headingText => {
+        const h3 = document.createElement('h3');
+        h3.textContent = headingText;
+        newDiv.appendChild(h3);
     });
 
     item.buttons.forEach(buttonData => {
@@ -207,6 +218,8 @@ buttons.forEach(button => {
         });
 
         // Показываем div, соответствующий классу кнопки
+       
+
         const targetPanel = document.querySelector(`#${targetPanelClass}`);
         if (targetPanel) {
             targetPanel.style.display = 'block';
