@@ -4,9 +4,9 @@ body {
   color:var(--tg-theme-text-color)
    }
 
-div {display:none;}
-
-.panel p {font-size: 20px;}
+div {display:none; font-size:20px;}
+div.panel p {font-size: 20px;}
+.panel {font-size: 20px;}
 
 button {border:0;
 text-transform:uppercase;
