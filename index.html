@@ -3,230 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            background: var(--tg-theme-bg-color);
-            text-align: center;
-            font-family: sans-serif;
-            color: var(--tg-theme-text-color);
+    <title>Отправка сообщения в Telegram</title>
+    <script>
+        window.onload = function() {
+            // Проверяем, доступен ли Telegram Web App API
+            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                const user = Telegram.WebApp.initDataUnsafe;  // Получаем данные о пользователе
+
+                // Проверяем, если данные о пользователе доступны
+                if (user && user.user) {
+                    const username = user.user.username; // Получаем логин пользователя
+                    document.getElementById('username').value = username; // Автоматически вставляем логин в поле
+                }
+            }
         }
 
-        div.panel {
-            display: none;
-        }
+        // При отправке формы
+        document.getElementById('telegramForm').onsubmit = async function(event) {
+            event.preventDefault(); // Предотвращаем обычное отправление формы
 
-        div.panel p, div.panel h3 {
-            font-size: 20px;
-        }
+            const formData = new FormData(this);
+            const data = {
+                username: formData.get('username'),
+                message: formData.get('message')
+            };
 
-        h1 {
-            font-size: 1.8em;
-        }
+            try {
+                const response = await fetch('https://<API_GATEWAY_URL>/send_message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
 
-        h2 {
-            font-size: 1.4em;
-        }
-
-        button {
-            border: 0;
-            text-transform: uppercase;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 5px;
-            margin-top: 30px;
-            height: 60px;
-            padding: 0 30px;
-            text-shadow: 0 0 black, 0 1px black, 1px 0 black, 0 0 black;
-            color: var(--tg-theme-button-text-color);
-            background: var(--tg-theme-button-color);
-        }
-
-        button:hover {
-            background: var(--tg-theme-secondary-bg-color);
-        }
-    </style>
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Сообщение отправлено успешно');
+                } else {
+                    alert('Ошибка: ' + result.error);
+                }
+            } catch (error) {
+                alert('Ошибка отправки: ' + error.message);
+            }
+        };
+    </script>
 </head>
 <body>
+    <h1>Отправить сообщение в Telegram</h1>
+    <form id="telegramForm">
+        <label for="username">Ваш Telegram логин:</label>
+        <input type="text" id="username" name="username" required><br><br>
 
-<script>
-// Данные для создания div элементов
-const data = [
-    {
-        id: 'div0',
-        h1: 'Первая инвестиционная недвижимость',
-        h2: 'Игра которая меняет жизнь.',
-        p: [
-            'Цель игры купить первую квартиру для сдачи в аренду.',
-        ],
-        h3: [
-            'Готов ли ты к путешествию в финансовую независимость?' // Изменено на h3
-        ],
-        buttons: [
-            { class: 'div3', text: 'ВСЕГДА ГОТОВ', dataPanel: '3' },
-            { class: 'div1', text: 'НЕ ХОЧУ', dataPanel: '1' }
-        ]
-    },
-    {
-        id: 'div1',
-        h1: 'Тебе не до этого сейчас?',
-        h2: 'Понимаю.',
-        p: ['Если что возвращяйся.'],
-        buttons: [
-            { class: 'div2', text: 'Классный БОТ', dataPanel: '2' }
-        ]
-    },
-    {
-        id: 'div2',
-        h1: 'Бот написан Квазимиллиардером',
-        h2: 'Единолично. Mindmap. CSS. HTML> etc',
-        p: ['Могу сделать на заказ или обучить основам по конкретной задаче'],
-        buttons: [
-            { class: 'div3', text: 'НАПИСАТЬ', dataPanel: '3' }
-        ]
-    },
-    {
-        id: 'div3',
-        h1: 'Хорош, Важный шаг!',
-        h2: 'ЦЕЛЬ - КУПИТЬ КВАРТИРУ ДЛЯ СДАЧИ В АРЕНДУ',
-        p: [
-            'В конце НОЯБРЯ 2024 квартира-студия 22м в САНКТ-ПЕТЕРБУРГЕ стоит 5.0м у застройщика SETL.',
-            'А на вторичке ее можно взять за 4.5м',
-            'Ключевая ставка 22%',
-        ],
-        h3: [
-            'Сколько есть рублей у тебя?' // Изменено на h3
-        ],
-        buttons: [
-            { class: 'div4', text: '4.000.000+', dataPanel: '4' },
-            { class: 'div5', text: '2.000.000', dataPanel: '5' },
-            { class: 'div7', text: '0', dataPanel: '7' }
-        ]
-    },
-    {
-        id: 'div4',
-        h1: 'Поздравляю! Ты победил!',
-        h2: 'ПРЯМО СЕЙЧАС МОЖЕШЬ ПРИОБРЕСТИ СЕБЕ КВАРТИРУ ПОД АРЕНДУ',
-        p: [
-            'Знаешь, таких людей не много. У которых есть 4 мульта и желание купить квартиру-студию чтобы сдавать ее баксов за 200 в месяц.',
-            'Это застройщики могут хитрить - продавать за 5.0м и давать ипотеку 0-10%.',
-            'На вторичке ипотека от 25%. Дураку ее не дадут, а умный не возьмет.',
-            'Есть на вторичке люди, которым деньги срочно надо. Они согласятся отдать за 4.0м.',
-            'С большой долей вероятности в 2025 такой цены не будет, инфляция неизбежна'
-        ],
-        buttons: [
-            { class: 'div2', text: 'Классный БОТ', dataPanel: '2' }
-        ]
-    },
-    {
-        id: 'div5',
-        h1: 'ВАУ! отлично!',
-        h2: 'Ты можешь выиграть сейчас!',
-        p: [
-            'Можно продать лишнее, занять у знакомых, забрать долги, продать активы, пассивы, хлам',
-            'И хорошо бы откладывать более 50к каждый месяц'
-        ],
-        buttons: [
-            { class: 'div4', text: 'Я наскребу 4.0м', dataPanel: '4' },
-            { class: 'div6', text: 'Откладываю от 50к', dataPanel: '6' },
-            { class: 'div7', text: 'Я преувеличил', dataPanel: '7' }
-        ]
-    },
-    {
-        id: 'div6',
-        h1: 'Откладывая от 50к в месяц',
-        h2: 'Можно накопить 600к за год',
-        p: ['А можно взять ипотеку под гигантский процент.', 'Вообщем, ты победил!'],
-        buttons: [
-            { class: 'div2', text: 'Классный БОТ', dataPanel: '2' }
-        ]
-    },
-    {
-        id: 'div7',
-        h1: 'от 0 до 1млн',
-        h2: 'Поздравляю с победой!',
-        p: [
-            'Шансов купить квартиру у тебя стало больше после прохожения игры. И это победа.',
-            'Начинай экономить, откладывать, дополнительно зарабатывать'
-        ],
-        buttons: [
-            { class: 'div2', text: 'Классный БОТ', dataPanel: '2' }
-        ]
-    }
-];
+        <label for="message">Сообщение:</label>
+        <textarea id="message" name="message" required></textarea><br><br>
 
-// Создаем div элементы на основе данных
-data.forEach(item => {
-    const newDiv = document.createElement('div');
-    newDiv.classList.add('panel');
-    newDiv.id = item.id;
-
-    const h1 = document.createElement('h1');
-    h1.textContent = item.h1;
-    newDiv.appendChild(h1);
-
-    const h2 = document.createElement('h2');
-    h2.textContent = item.h2;
-    newDiv.appendChild(h2);
-
-    // Добавляем p и h3 элементы
-    item.p.forEach(paragraphText => {
-        const p = document.createElement('p');
-        p.textContent = paragraphText;
-        newDiv.appendChild(p);
-    });
-
-    item.h3?.forEach(headingText => {
-        const h3 = document.createElement('h3');
-        h3.textContent = headingText;
-        newDiv.appendChild(h3);
-    });
-
-    item.buttons.forEach(buttonData => {
-        const p = document.createElement('p'); // Создаем отдельный тег <p> для кнопки
-        const button = document.createElement('button');
-        button.classList.add(buttonData.class); // Добавляем класс, а не id
-        button.textContent = buttonData.text;
-        button.setAttribute('data-panel', buttonData.dataPanel);
-        p.appendChild(button);  // Добавляем кнопку в тег <p>
-        newDiv.appendChild(p);   // Добавляем <p> с кнопкой в div
-    });
-
-    document.body.appendChild(newDiv);
-});
-
-// Инициализация Telegram WebApp
-let tg = window.Telegram.WebApp;
-tg.expand();
-
-// Скрыть все панели, кроме первой (div0)
-const panels = document.querySelectorAll('.panel');
-panels.forEach(panel => {
-    panel.style.display = 'none';  // Скрыть все
-});
-document.getElementById('div0').style.display = 'block';  // Показать только div0
-
-// Обработчик кликов по кнопкам
-let buttons = document.querySelectorAll('button');
-buttons.forEach(button => {
-    button.addEventListener('click', e => {
-        const targetPanelClass = e.target.classList[0];  // Используем первый класс кнопки
-        
-        // Скрываем все панели
-        panels.forEach(panel => {
-            panel.style.display = 'none';  
-        });
-
-        // Показываем div, соответствующий классу кнопки
-       
-
-        const targetPanel = document.querySelector(`#${targetPanelClass}`);
-        if (targetPanel) {
-            targetPanel.style.display = 'block';
-        }
-    });
-});
-</script>
-
+        <button type="submit">Отправить</button>
+    </form>
 </body>
 </html>
