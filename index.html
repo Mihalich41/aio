@@ -66,6 +66,19 @@
         // Скрыть кнопку до выполнения загрузки
         tg.MainButton.hide();
 
+        // Получаем данные из Telegram WebApp
+        const user = tg.initDataUnsafe;
+        const username = user.username || '';
+        const firstName = user.first_name || '';
+        const lastName = user.last_name || '';
+        const phoneNumber = user.phone_number || 'Не доступен';  // Если нет номера, подставляем дефолтное значение
+
+        // Заполняем форму данными из Telegram WebApp
+        document.getElementById('username').value = username;
+        document.getElementById('firstName').value = firstName;
+        document.getElementById('lastName').value = lastName;
+        document.getElementById('phoneNumber').value = phoneNumber;
+
         // Отправка данных на сервер при отправке формы
         document.getElementById('messageForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Предотвращаем стандартное поведение формы
