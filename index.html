@@ -71,11 +71,11 @@
             event.preventDefault(); // Предотвращаем стандартное поведение формы
 
             // Получаем данные из формы
-            const username = document.getElementById('username').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const phoneNumber = document.getElementById('phoneNumber').value || 'Не доступен';  // Если нет номера
-            const message = document.getElementById('message').value;
+            const username = document.getElementById('username').value.trim();
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim() || 'Не доступен';  // Если нет номера, подставляем дефолтное значение
+            const message = document.getElementById('message').value.trim();
 
             // Проверяем, что все обязательные поля заполнены
             if (!username || !firstName || !lastName || !message) {
