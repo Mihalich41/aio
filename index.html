@@ -98,15 +98,14 @@ function showForm() {
     const panels = document.querySelectorAll('.panel');
     panels.forEach(panel => panel.style.display = 'none');
     
-    // Создаем контейнер для формы
-    const formDiv = document.createElement('div');
-    formDiv.classList.add('form-panel');
-
     // Загружаем HTML для формы
     fetch('form.html')  // Загружаем form.html
         .then(response => response.text())
         .then(html => {
-            formDiv.innerHTML = html; // Вставляем HTML
+            // Вставляем HTML форму
+            const formDiv = document.createElement('div');
+            formDiv.classList.add('form-panel');
+            formDiv.innerHTML = html;
             document.body.appendChild(formDiv);
 
             // Подставляем данные пользователя из Telegram WebApp
@@ -120,7 +119,7 @@ function showForm() {
                 if (username) document.getElementById('username').value = username;
             }
 
-            // Подключаем JS файл для обработки формы
+            // Подключаем JS файл для работы с формой
             const script = document.createElement('script');
             script.src = 'form.js';  // Подключаем файл для работы с формой
             document.body.appendChild(script);
