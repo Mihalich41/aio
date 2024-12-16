@@ -3,61 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Отправка сообщения</title>
+    <title>Телеграмм Бот - WebApp</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Немного стилей для формы */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-container input, .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Форма обратной связи</h1>
-    <form id="contactForm">
-        <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        
-        <label for="firstName">Имя:</label>
-        <input type="text" id="firstName" name="firstName" required><br><br>
-        
-        <label for="lastName">Фамилия:</label>
-        <input type="text" id="lastName" name="lastName" required><br><br>
-        
-        <label for="phoneNumber">Телефон:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" required><br><br>
-        
-        <label for="message">Сообщение:</label>
-        <textarea id="message" name="message" required></textarea><br><br>
-        
-        <button type="submit">Отправить</button>
-    </form>
+    <div class="form-container">
+        <h2>Отправить сообщение</h2>
+        <form id="messageForm">
+            <input type="text" id="username" placeholder="Ваше имя" required>
+            <input type="text" id="firstName" placeholder="Ваше имя (First Name)" required>
+            <input type="text" id="lastName" placeholder="Ваша фамилия (Last Name)" required>
+            <input type="text" id="phoneNumber" placeholder="Ваш телефон (Необязательно)">
+            <textarea id="message" placeholder="Ваше сообщение" required></textarea>
+            <button type="submit">Отправить сообщение</button>
+        </form>
+    </div>
 
     <script>
-        const form = document.getElementById('contactForm');
-        form.onsubmit = async function(event) {
-            event.preventDefault();  // Останавливаем стандартное поведение формы
+        // Инициализация Telegram WebApp API
+        let tg = window.Telegram.WebApp;
+        tg.ready(); // Ожидаем готовности WebApp
 
-            // Собираем данные из формы
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+        // Скрыть кнопку до выполнения загрузки
+        tg.MainButton.hide();
 
-            // Отправляем данные в Яндекс.Функцию
-            try {
-                const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
+        // Отправка данных на сервер при отправке формы
+        document.getElementById('messageForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
 
-                if (response.ok) {
-                    const result = await response.json();
-                    alert('Сообщение отправлено успешно');
-                } else {
-                    alert('Ошибка отправки сообщения');
-                }
-            } catch (error) {
-                alert('Ошибка отправки сообщения');
+            // Получаем данные из формы
+            const username = document.getElementById('username').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value || 'Не доступен';  // Если нет номера
+            const message = document.getElementById('message').value;
+
+            // Проверяем, что все обязательные поля заполнены
+            if (!username || !firstName || !lastName || !message) {
+                alert('Пожалуйста, заполните все обязательные поля!');
+                return;
             }
-        };
+
+            // Данные, которые будем отправлять на сервер
+            const data = {
+                username: username,
+                firstName: firstName,
+                lastName: lastName,
+                phoneNumber: phoneNumber,
+                message: message,
+                chat_id: '626560044'  // Указываем ID чата
+            };
+
+            // Отправка данных на сервер через fetch
+            fetch('https://your-backend-url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Убедитесь, что отправляем в формате JSON
+                },
+                body: JSON.stringify(data)  // Преобразуем данные в строку JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Сообщение отправлено успешно!');
+                tg.MainButton.show(); // Показываем кнопку после успешной отправки
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при отправке сообщения!');
+            });
+        });
+
+        // Устанавливаем текст на кнопке и показываем её
+        tg.MainButton.setText("Отправить");
+        tg.MainButton.show();
+
+        // Обработчик клика по кнопке
+        tg.MainButton.onClick(() => {
+            // При нажатии на кнопку, также можно выполнить действия
+            document.getElementById('messageForm').submit();  // Отправить форму
+        });
     </script>
 </body>
 </html>
