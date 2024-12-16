@@ -8,34 +8,37 @@
         window.onload = function() {
             // Проверяем доступность Telegram Web App API
             if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                // Получаем все данные о пользователе
+                // Получаем все данные о пользователе через Telegram API
                 const userData = Telegram.WebApp.initDataUnsafe;
 
-                // Выводим данные о пользователе в консоль
-                console.log('Данные о пользователе:', userData);
+                // Выводим все доступные данные в консоль
+                console.log('Данные, пришедшие через Telegram Web App API:', userData);
 
-                // Если данные доступны, извлекаем и подставляем их в форму
+                // Проверяем, есть ли объект с данными пользователя
                 if (userData && userData.user) {
                     const username = userData.user.username;
                     const firstName = userData.user.first_name;
                     const lastName = userData.user.last_name;
-                    const phoneNumber = userData.user.phone_number || 'Не доступен'; // Номер телефона (если доступен)
+                    const phoneNumber = userData.user.phone_number || 'Не доступен'; // Проверяем телефон
 
+                    // Выводим извлеченные данные в консоль
                     console.log(`Username: ${username}`);
                     console.log(`First Name: ${firstName}`);
                     console.log(`Last Name: ${lastName}`);
                     console.log(`Phone Number: ${phoneNumber}`);
 
-                    // Подставляем логин и другие данные в форму
+                    // Подставляем данные в форму, если они существуют
                     if (username) document.getElementById('username').value = username;
                     if (firstName) document.getElementById('firstName').value = firstName;
                     if (lastName) document.getElementById('lastName').value = lastName;
                     if (phoneNumber) document.getElementById('phoneNumber').value = phoneNumber;
+                } else {
+                    console.log('Данные о пользователе не найдены');
                 }
             } else {
                 console.log('Telegram WebApp API не доступен');
             }
-        }
+        };
 
         // При отправке формы
         document.getElementById('telegramForm').onsubmit = async function(event) {
