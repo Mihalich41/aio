@@ -108,15 +108,6 @@ function showForm() {
             <label for="username">Ваш Telegram логин:</label>
             <input type="text" id="username" name="username" required><br><br>
 
-          <!--  <label for="firstName">Ваше имя:</label>
-            <input type="text" id="firstName" name="firstName" required><br><br>
-
-            <label for="lastName">Ваша фамилия:</label>
-            <input type="text" id="lastName" name="lastName"><br><br>
-
-            <label for="phoneNumber">Ваш номер телефона:</label>
-            <input type="text" id="phoneNumber" name="phoneNumber"><br><br> -->
-
             <label for="message">Сообщение:</label>
             <textarea id="message" name="message" required></textarea><br><br>
 
@@ -132,15 +123,9 @@ function showForm() {
 
     if (userData && userData.user) {
         const username = userData.user.username;
-        const firstName = userData.user.first_name;
-        const lastName = userData.user.last_name;
-        const phoneNumber = userData.user.phone_number || 'Не доступен';
 
         // Подставляем данные в форму
         if (username) document.getElementById('username').value = username;
-        if (firstName) document.getElementById('firstName').value = firstName;
-        if (lastName) document.getElementById('lastName').value = lastName;
-        if (phoneNumber) document.getElementById('phoneNumber').value = phoneNumber;
     }
 
     // Обработчик отправки формы
@@ -150,13 +135,13 @@ function showForm() {
         const formData = new FormData(this);
         const data = {
             username: formData.get('username'),
-            firstName: formData.get('firstName'),
-            lastName: formData.get('lastName'),
-            phoneNumber: formData.get('phoneNumber'),
             message: formData.get('message')
         };
 
         try {
+            // Выводим данные, чтобы убедиться, что они правильные
+            console.log('Отправляемые данные:', data);
+
             const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -171,6 +156,7 @@ function showForm() {
             }
         } catch (error) {
             alert('Ошибка отправки: ' + error.message);
+            console.error('Ошибка при отправке:', error);
         }
     };
 }
