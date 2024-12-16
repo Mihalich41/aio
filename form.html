@@ -1,13 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
     const tg = window.Telegram.WebApp;
-    const userData = tg.initDataUnsafe;
 
-    // Ждем загрузки приложения Telegram WebApp
+    // Ждем, пока Telegram WebApp полностью инициализируется
     tg.onEvent('themeChanged', function () {
-        // Подставляем данные пользователя в форму
+        const userData = tg.initDataUnsafe;
+
+        // Проверка на наличие данных и подстановка логина в форму
         if (userData && userData.user) {
             const username = userData.user.username;
-            if (username) document.getElementById('username').value = username;
+            if (username) {
+                document.getElementById('username').value = username;
+            }
         }
     });
 
@@ -22,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         try {
+            // Выводим данные, чтобы убедиться, что они правильные
+            console.log('Отправляемые данные:', data);
+
             const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
