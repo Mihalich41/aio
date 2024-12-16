@@ -121,6 +121,9 @@ function showForm() {
             // Подключаем JS файл для работы с формой
             const script = document.createElement('script');
             script.src = 'form.js';  // Подключаем файл для работы с формой
+            script.onload = function() {
+                console.log('form.js загружен и готов к работе');
+            };
             document.body.appendChild(script);
         })
         .catch(error => {
