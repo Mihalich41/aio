@@ -69,7 +69,7 @@ async function loadData() {
             button.addEventListener('click', e => {
                 const targetPanelClass = e.target.classList[0];  // Используем первый класс кнопки
 
-                // Если класс кнопки formdiv, показываем форму на той же странице
+                // Если класс кнопки formdiv, показываем форму
                 if (targetPanelClass === 'formdiv') {
                     showForm();
                     return;  // Останавливаем дальнейшее выполнение
@@ -95,12 +95,21 @@ async function loadData() {
 // Функция для загрузки и отображения формы
 async function showForm() {
     try {
-        // Загружаем form.html и вставляем его в страницу
+        // Скрываем все панели перед загрузкой формы
+        const panels = document.querySelectorAll('.panel');
+        panels.forEach(panel => {
+            panel.style.display = 'none';  
+        });
+
+        // Создаем контейнер для формы и вставляем HTML
+        const formContainer = document.createElement('div');
+        formContainer.classList.add('form-container');
+        
+        // Загружаем form.html
         const response = await fetch('form.html');
         const formHtml = await response.text();
         
-        // Создаем контейнер для формы и вставляем HTML
-        const formContainer = document.createElement('div');
+        // Вставляем форму в контейнер
         formContainer.innerHTML = formHtml;
 
         // Вставляем форму на страницу
