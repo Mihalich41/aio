@@ -3,44 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Отправка сообщения в Telegram</title>
+    <title>Telegram Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         window.onload = function() {
-            // Проверяем доступность Telegram Web App API
-            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                // Получаем все данные о пользователе через Telegram API
-                const userData = Telegram.WebApp.initDataUnsafe;
+            // Инициализируем объект Telegram WebApp
+            let tg = window.Telegram.WebApp;
 
-                // Выводим все доступные данные в консоль
-                console.log('Данные, пришедшие через Telegram Web App API:', userData);
+            // Проверяем доступность объекта WebApp
+            console.log('Telegram WebApp:', tg);
 
-                // Проверяем, есть ли объект с данными пользователя
-                if (userData && userData.user) {
-                    const username = userData.user.username;
-                    const firstName = userData.user.first_name;
-                    const lastName = userData.user.last_name;
-                    const phoneNumber = userData.user.phone_number || 'Не доступен'; // Проверяем телефон
+            // Получаем данные о пользователе из initDataUnsafe
+            const userData = tg.initDataUnsafe;
+            console.log('Данные пользователя:', userData);
 
-                    // Выводим извлеченные данные в консоль
-                    console.log(`Username: ${username}`);
-                    console.log(`First Name: ${firstName}`);
-                    console.log(`Last Name: ${lastName}`);
-                    console.log(`Phone Number: ${phoneNumber}`);
+            // Если данные пользователя есть, подставляем их в форму
+            if (userData && userData.user) {
+                const username = userData.user.username;
+                const firstName = userData.user.first_name;
+                const lastName = userData.user.last_name;
+                const phoneNumber = userData.user.phone_number || 'Не доступен';
 
-                    // Подставляем данные в форму, если они существуют
-                    if (username) document.getElementById('username').value = username;
-                    if (firstName) document.getElementById('firstName').value = firstName;
-                    if (lastName) document.getElementById('lastName').value = lastName;
-                    if (phoneNumber) document.getElementById('phoneNumber').value = phoneNumber;
-                } else {
-                    console.log('Данные о пользователе не найдены');
-                }
-            } else {
-                console.log('Telegram WebApp API не доступен');
+                // Подставляем данные в форму
+                if (username) document.getElementById('username').value = username;
+                if (firstName) document.getElementById('firstName').value = firstName;
+                if (lastName) document.getElementById('lastName').value = lastName;
+                if (phoneNumber) document.getElementById('phoneNumber').value = phoneNumber;
             }
         };
 
-        // При отправке формы
+        // Обработчик отправки формы
         document.getElementById('telegramForm').onsubmit = async function(event) {
             event.preventDefault(); // Предотвращаем обычное отправление формы
 
