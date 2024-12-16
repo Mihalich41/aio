@@ -108,6 +108,12 @@ async function loadData() {
             button.addEventListener('click', e => {
                 const targetPanelClass = e.target.classList[0];  // Используем первый класс кнопки
 
+                // Если класс кнопки formdiv, открываем form.html
+                if (targetPanelClass === 'formdiv') {
+                    window.location.href = 'form.html';  // Переход на форму
+                    return;  // Останавливаем дальнейшее выполнение кода
+                }
+
                 // Скрываем все панели
                 panels.forEach(panel => {
                     panel.style.display = 'none';  
