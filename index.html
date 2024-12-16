@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключение внешнего CSS файла -->
     <link rel="stylesheet" href="styles.css">
     <title>Telegram Web App</title>
 </head>
@@ -97,39 +98,67 @@ function showForm() {
     const panels = document.querySelectorAll('.panel');
     panels.forEach(panel => panel.style.display = 'none');
     
-    // Загружаем HTML для формы
-    fetch('form.html')  // Загружаем form.html
-        .then(response => response.text())
-        .then(html => {
-            // Вставляем HTML форму
-            const formDiv = document.createElement('div');
-            formDiv.classList.add('form-panel');
-            formDiv.innerHTML = html;
-            document.body.appendChild(formDiv);
+    // Создаем форму
+    const formDiv = document.createElement('div');
+    formDiv.classList.add('form-panel');
 
-            // Подставляем данные пользователя из Telegram WebApp
-            const tg = window.Telegram.WebApp;
-            const userData = tg.initDataUnsafe;
+    formDiv.innerHTML = `
+        <h2>Отправить сообщение в Telegram</h2>
+        <form id="telegramForm">
+            <label for="username">Ваш Telegram логин:</label>
+            <input type="text" id="username" name="username" required><br><br>
 
-            if (userData && userData.user) {
-                const username = userData.user.username;
+            <label for="message">Сообщение:</label>
+            <textarea id="message" name="message" required></textarea><br><br>
 
-                // Подставляем данные в форму
-                if (username) document.getElementById('username').value = username;
+            <button type="submit">Отправить</button>
+        </form>
+    `;
+
+    document.body.appendChild(formDiv);
+
+    // Подставляем данные пользователя из Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    const userData = tg.initDataUnsafe;
+
+    if (userData && userData.user) {
+        const username = userData.user.username;
+
+        // Подставляем данные в форму
+        if (username) document.getElementById('username').value = username;
+    }
+
+    // Обработчик отправки формы
+    document.getElementById('telegramForm').onsubmit = async function(event) {
+        event.preventDefault(); // Предотвращаем обычное отправление формы
+
+        const formData = new FormData(this);
+        const data = {
+            username: formData.get('username'),
+            message: formData.get('message')
+        };
+
+        try {
+            // Выводим данные, чтобы убедиться, что они правильные
+            console.log('Отправляемые данные:', data);
+
+            const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert('Сообщение отправлено успешно');
+            } else {
+                alert('Ошибка: ' + result.error);
             }
-
-            // Подключаем JS файл для работы с формой
-            const script = document.createElement('script');
-            script.src = 'form.js';  // Подключаем файл для работы с формой
-            script.defer = true;  // Отложенная загрузка
-            script.onload = function() {
-                console.log('form.js загружен и готов к работе');
-            };
-            document.body.appendChild(script);
-        })
-        .catch(error => {
-            console.error('Ошибка при загрузке формы:', error);
-        });
+        } catch (error) {
+            alert('Ошибка отправки: ' + error.message);
+            console.error('Ошибка при отправке:', error);
+        }
+    };
 }
 
 // Загружаем данные
