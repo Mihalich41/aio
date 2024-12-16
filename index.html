@@ -8,16 +8,29 @@
         window.onload = function() {
             // Проверяем доступность Telegram Web App API
             if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                // Получаем данные о пользователе
-                const user = Telegram.WebApp.initDataUnsafe;
+                // Получаем все данные о пользователе
+                const userData = Telegram.WebApp.initDataUnsafe;
 
-                // Проверяем, если данные о пользователе есть
-                if (user && user.user) {
-                    const username = user.user.username; // Получаем логин пользователя
-                    if (username) {
-                        // Подставляем логин в поле формы
-                        document.getElementById('username').value = username;
-                    }
+                // Выводим данные о пользователе в консоль
+                console.log('Данные о пользователе:', userData);
+
+                // Если данные доступны, извлекаем и подставляем их в форму
+                if (userData && userData.user) {
+                    const username = userData.user.username;
+                    const firstName = userData.user.first_name;
+                    const lastName = userData.user.last_name;
+                    const phoneNumber = userData.user.phone_number || 'Не доступен'; // Номер телефона (если доступен)
+
+                    console.log(`Username: ${username}`);
+                    console.log(`First Name: ${firstName}`);
+                    console.log(`Last Name: ${lastName}`);
+                    console.log(`Phone Number: ${phoneNumber}`);
+
+                    // Подставляем логин и другие данные в форму
+                    if (username) document.getElementById('username').value = username;
+                    if (firstName) document.getElementById('firstName').value = firstName;
+                    if (lastName) document.getElementById('lastName').value = lastName;
+                    if (phoneNumber) document.getElementById('phoneNumber').value = phoneNumber;
                 }
             } else {
                 console.log('Telegram WebApp API не доступен');
@@ -31,6 +44,9 @@
             const formData = new FormData(this);
             const data = {
                 username: formData.get('username'),
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                phoneNumber: formData.get('phoneNumber'),
                 message: formData.get('message')
             };
 
@@ -58,6 +74,15 @@
     <form id="telegramForm">
         <label for="username">Ваш Telegram логин:</label>
         <input type="text" id="username" name="username" required><br><br>
+
+        <label for="firstName">Ваше имя:</label>
+        <input type="text" id="firstName" name="firstName" required><br><br>
+
+        <label for="lastName">Ваша фамилия:</label>
+        <input type="text" id="lastName" name="lastName"><br><br>
+
+        <label for="phoneNumber">Ваш номер телефона:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber"><br><br>
 
         <label for="message">Сообщение:</label>
         <textarea id="message" name="message" required></textarea><br><br>
