@@ -6,15 +6,21 @@
     <title>Отправка сообщения в Telegram</title>
     <script>
         window.onload = function() {
-            // Проверяем, доступен ли Telegram Web App API
+            // Проверяем доступность Telegram Web App API
             if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                const user = Telegram.WebApp.initDataUnsafe;  // Получаем данные о пользователе
+                // Получаем данные о пользователе
+                const user = Telegram.WebApp.initDataUnsafe;
 
-                // Проверяем, если данные о пользователе доступны
+                // Проверяем, если данные о пользователе есть
                 if (user && user.user) {
                     const username = user.user.username; // Получаем логин пользователя
-                    document.getElementById('username').value = username; // Автоматически вставляем логин в поле
+                    if (username) {
+                        // Подставляем логин в поле формы
+                        document.getElementById('username').value = username;
+                    }
                 }
+            } else {
+                console.log('Telegram WebApp API не доступен');
             }
         }
 
