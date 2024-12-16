@@ -121,6 +121,7 @@ function showForm() {
             // Подключаем JS файл для работы с формой
             const script = document.createElement('script');
             script.src = 'form.js';  // Подключаем файл для работы с формой
+            script.defer = true;  // Отложенная загрузка
             script.onload = function() {
                 console.log('form.js загружен и готов к работе');
             };
