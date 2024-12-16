@@ -10,7 +10,6 @@
 </head>
 <body>
 
-<!-- Скрипт для загрузки данных из JSON и отображения панелей -->
 <script>
 // Функция для загрузки данных из JSON файла
 async function loadData() {
@@ -109,14 +108,14 @@ function showForm() {
             <label for="username">Ваш Telegram логин:</label>
             <input type="text" id="username" name="username" required><br><br>
 
-          <!-- <label for="firstName">Ваше имя:</label>
+            <label for="firstName">Ваше имя:</label>
             <input type="text" id="firstName" name="firstName" required><br><br>
 
             <label for="lastName">Ваша фамилия:</label>
             <input type="text" id="lastName" name="lastName"><br><br>
 
             <label for="phoneNumber">Ваш номер телефона:</label>
-            <input type="text" id="phoneNumber" name="phoneNumber"><br><br> -->
+            <input type="text" id="phoneNumber" name="phoneNumber"><br><br>
 
             <label for="message">Сообщение:</label>
             <textarea id="message" name="message" required></textarea><br><br>
@@ -126,6 +125,23 @@ function showForm() {
     `;
 
     document.body.appendChild(formDiv);
+
+    // Подставляем данные пользователя из Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    const userData = tg.initDataUnsafe;
+
+    if (userData && userData.user) {
+        const username = userData.user.username;
+        const firstName = userData.user.first_name;
+        const lastName = userData.user.last_name;
+        const phoneNumber = userData.user.phone_number || 'Не доступен';
+
+        // Подставляем данные в форму
+        if (username) document.getElementById('username').value = username;
+        if (firstName) document.getElementById('firstName').value = firstName;
+        if (lastName) document.getElementById('lastName').value = lastName;
+        if (phoneNumber) document.getElementById('phoneNumber').value = phoneNumber;
+    }
 
     // Обработчик отправки формы
     document.getElementById('telegramForm').onsubmit = async function(event) {
