@@ -50,6 +50,11 @@ div.panel {
     box-sizing: border-box;
 }
 
+div.panel p {
+    display: inline-block;
+    margin: 5px;
+}
+
 div.panel p,
 div.panel h3 {
     font-size: 20px;
@@ -62,14 +67,19 @@ button {
     font-size: 20px;
     font-weight: bold;
     border-radius: 5px;
-    margin-top: 30px;
-    width: 200px;
+    margin: 10px;
+    min-width: 200px;
+    max-width: 100%;
     height: 60px;
     padding: 0 30px;
     text-shadow: 0 0 black, 0 1px black, 1px 0 black, 0 0 black;
     color: var(--tg-theme-button-text-color);
     background: var(--tg-theme-button-color);
     cursor: pointer;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 button:hover {
@@ -100,45 +110,5 @@ form textarea {
     margin-top: 5px;
     margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1em;
-}
-
-form button {
-    padding: 10px 20px;
-    background-color: var(--tg-theme-button-color);
-    color: var(--tg-theme-button-text-color);
-    font-weight: bold;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2em;
-}
-
-form button:hover {
-    background-color: var(--tg-theme-secondary-bg-color);
-}
-
-/* Стили для сообщений и формы на других панелях */
-div.panel p, div.panel h3 {
-    font-size: 20px;
-}
-
-/* Мобильные стили */
-@media screen and (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 1.6em;
-    }
-
-    h2 {
-        font-size: 1.2em;
-    }
-
-    button {
-        font-size: 18px;
-    }
+    border: 1px solid #
 } 
