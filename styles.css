@@ -13,7 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-top: 70px; /* Отступ для фиксированного header */
+    padding-top: 70px;
 }
 
 /* Стили для header */
@@ -33,13 +33,18 @@ header {
 
 .logo {
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.5em;
+    color: var(--tg-theme-link-color);
+    flex: 1;
+    text-align: left;
 }
 
 .back-link {
     color: var(--tg-theme-link-color);
     text-decoration: none;
-    font-size: 1.1em;
+    font-size: 1.5em;
+    flex: 1;
+    text-align: right;
 }
 
 h1 {
@@ -140,7 +145,7 @@ form textarea {
 @media screen and (max-width: 768px) {
     body {
         padding: 10px;
-        padding-top: 70px; /* Сохраняем отступ для header */
+        padding-top: 70px;
     }
 
     h1 {
@@ -161,10 +166,10 @@ form textarea {
     }
 
     .logo {
-        font-size: 1.1em;
+        font-size: 1.3em;
     }
 
     .back-link {
-        font-size: 1em;
+        font-size: 1.3em;
     }
 } 
