@@ -37,6 +37,9 @@ async function loadData() {
 
             const h2 = document.createElement('h2');
             h2.innerHTML = item.h2;
+            if (item.h2class) {
+                h2.classList.add(item.h2class);
+            }
             newDiv.appendChild(h2);
 
             // Добавляем форму для всех div кроме div0
