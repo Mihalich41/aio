@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключение внешнего CSS файла -->
+    <link rel="stylesheet" href="styles.css">
+    <title>Telegram Web App</title>
+</head>
+<body>
+
+<script>
+// Функция для загрузки данных из JSON файла
+async function loadData() {
+    try {
+        const response = await fetch('game_data.json');  // Загружаем файл JSON
+        const data = await response.json();
+
+        // Создаем div элементы на основе данных
+        data.forEach(item => {
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('panel');
+            newDiv.id = item.id;
+
+            const h1 = document.createElement('h1');
+            h1.textContent = item.h1;
+            newDiv.appendChild(h1);
+
+            const h2 = document.createElement('h2');
+            h2.textContent = item.h2;
+            newDiv.appendChild(h2);
+
+            // Добавляем p и h3 элементы
+            item.p.forEach(paragraphText => {
+                const p = document.createElement('p');
+                p.textContent = paragraphText;
+                newDiv.appendChild(p);
+            });
+
+            item.h3?.forEach(headingText => {
+                const h3 = document.createElement('h3');
+                h3.textContent = headingText;
+                newDiv.appendChild(h3);
+            });
+
+            item.buttons.forEach(buttonData => {
+                const p = document.createElement('p'); // Создаем отдельный тег <p> для кнопки
+                const button = document.createElement('button');
+                button.classList.add(buttonData.class); // Добавляем класс, а не id
+                button.textContent = buttonData.text;
+                p.appendChild(button);  // Добавляем кнопку в тег <p>
+                newDiv.appendChild(p);   // Добавляем <p> с кнопкой в div
+            });
+
+            document.body.appendChild(newDiv);
+        });
+
+        // Скрыть все панели, кроме первой (div0)
+        const panels = document.querySelectorAll('.panel');
+        panels.forEach(panel => {
+            panel.style.display = 'none';  // Скрыть все
+        });
+        document.getElementById('div0').style.display = 'block';  // Показать только div0
+
+        // Обработчик кликов по кнопкам
+        let buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('click', e => {
+                const targetPanelClass = e.target.classList[0];  // Используем первый класс кнопки
+
+                // Если класс кнопки formdiv, показываем форму на той же странице
+                if (targetPanelClass === 'formdiv') {
+                    showForm();
+                    return;  // Останавливаем дальнейшее выполнение
+                }
+
+                // Скрываем все панели
+                panels.forEach(panel => {
+                    panel.style.display = 'none';  
+                });
+
+                // Показываем div, соответствующий классу кнопки
+                const targetPanel = document.querySelector(`#${targetPanelClass}`);
+                if (targetPanel) {
+                    targetPanel.style.display = 'block';
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
+}
+
+// Функция для отображения формы
+function showForm() {
+    // Скрываем все остальные панели
+    const panels = document.querySelectorAll('.panel');
+    panels.forEach(panel => panel.style.display = 'none');
+    
+    // Создаем форму
+    const formDiv = document.createElement('div');
+    formDiv.classList.add('form-panel');
+
+    formDiv.innerHTML = `
+        <h2>Отправить сообщение в Telegram</h2>
+        <form id="telegramForm">
+            <label for="username">Ваш Telegram логин:</label>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="message">Сообщение:</label>
+            <textarea id="message" name="message" required></textarea><br><br>
+
+            <button type="submit">Отправить</button>
+        </form>
+    `;
+
+    document.body.appendChild(formDiv);
+
+    // Подставляем данные пользователя из Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    const userData = tg.initDataUnsafe;
+
+    if (userData && userData.user) {
+        const username = userData.user.username;
+
+        // Подставляем данные в форму
+        if (username) document.getElementById('username').value = username;
+    }
+
+    // Обработчик отправки формы
+    document.getElementById('telegramForm').onsubmit = async function(event) {
+        event.preventDefault(); // Предотвращаем обычное отправление формы
+
+        const formData = new FormData(this);
+        const data = {
+            username: formData.get('username'),
+            message: formData.get('message')
+        };
+
+        try {
+            // Выводим данные, чтобы убедиться, что они правильные
+            console.log('Отправляемые данные:', data);
+
+            const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert('Сообщение отправлено успешно');
+            } else {
+                alert('Ошибка: ' + result.error);
+            }
+        } catch (error) {
+            alert('Ошибка отправки: ' + error.message);
+            console.error('Ошибка при отправке:', error);
+        }
+    };
+}
+
+// Загружаем данные
+loadData();
+</script>
+
+</body>
+</html>
