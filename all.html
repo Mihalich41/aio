@@ -9,6 +9,11 @@
 </head>
 <body>
 
+<header>
+    <div class="logo">KVAZIGAME</div>
+    <a href="#" class="back-link">< назад</a>
+</header>
+
 <script>
 // Расширяем на весь экран
 const tg = window.Telegram.WebApp;
@@ -115,6 +120,20 @@ async function loadData() {
                     targetPanel.style.display = 'block';
                 }
             });
+        });
+
+        // Обработчик для кнопки "назад"
+        document.querySelector('.back-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentPanel = document.querySelector('.panel[style*="block"]');
+            if (currentPanel && currentPanel.id !== 'div0') {
+                document.querySelectorAll('.panel').forEach(panel => {
+                    panel.style.display = 'none';
+                });
+                document.getElementById('div0').style.display = 'block';
+            } else {
+                window.history.back();
+            }
         });
 
     } catch (error) {
