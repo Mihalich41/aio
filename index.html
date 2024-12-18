@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Подключение внешнего CSS файла -->
     <link rel="stylesheet" href="styles.css">
     <title>Telegram Web App</title>
 </head>
 <body>
 
 <script>
+// Расширяем на весь экран
+const tg = window.Telegram.WebApp;
+tg.expand();
+
 // Функция для загрузки данных из JSON файла
 async function loadData() {
     try {
@@ -59,7 +62,7 @@ async function loadData() {
         // Скрыть все панели, кроме первой (div0)
         const panels = document.querySelectorAll('.panel');
         panels.forEach(panel => {
-            panel.style.display = 'none';  // Ск��ыть все
+            panel.style.display = 'none';  // Скрыть все
         });
         document.getElementById('div0').style.display = 'block';  // Показать только div0
 
@@ -88,7 +91,7 @@ async function loadData() {
             });
         });
     } catch (error) {
-        console.error('Ош��бка при загрузке данных:', error);
+        console.error('Ошибка при загрузке данных:', error);
     }
 }
 
