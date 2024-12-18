@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <title>Все возможности</title>
+</head>
+<body>
+
+<script>
+async function loadData() {
+    try {
+        // Получаем данные пользователя из Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        const userData = tg.initDataUnsafe;
+        let username = 'Гость';
+
+        // Получаем username из Telegram
+        if (userData && userData.user && userData.user.username) {
+            username = '@' + userData.user.username;
+        }
+
+        // Загружаем JSON
+        const response = await fetch('all.json');
+        let data = await response.json();
+        
+        // Заменяем ${username} во всех текстах
+        const replaceUsername = (text) => text.replace('${username}', username);
+        
+        data[0].h1 = replaceUsername(data[0].h1);
+        data[0].p = data[0].p.map(text => replaceUsername(text));
+
+        // Создаем div элементы на основе данных
+        data.forEach(item => {
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('panel');
+            newDiv.id = item.id;
+
+            const h1 = document.createElement('h1');
+            h1.textContent = item.h1;
+            newDiv.appendChild(h1);
+
+            const h2 = document.createElement('h2');
+            h2.textContent = item.h2;
+            newDiv.appendChild(h2);
+
+            item.p.forEach(paragraphText => {
+                const p = document.createElement('p');
+                p.textContent = paragraphText;
+                newDiv.appendChild(p);
+            });
+
+            item.buttons.forEach(buttonData => {
+                const p = document.createElement('p');
+                const button = document.createElement('button');
+                button.classList.add(buttonData.class);
+                button.textContent = buttonData.text;
+                p.appendChild(button);
+                newDiv.appendChild(p);
+            });
+
+            document.body.appendChild(newDiv);
+        });
+
+        // Обработчик для кнопки "Назад"
+        document.querySelectorAll('.back').forEach(button => {
+            button.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+        });
+
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
+}
+
+// Загружаем данные
+loadData();
+</script>
+
+</body>
+</html>
