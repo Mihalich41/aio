@@ -12,8 +12,15 @@
 <script>
 async function loadData() {
     try {
-        const response = await fetch('all.json');  // Загружаем другой JSON файл
-        const data = await response.json();
+        // Получаем username из Telegram
+        const tg = window.Telegram.WebApp;
+        const userData = tg.initDataUnsafe;
+        let username = userData?.user?.username || 'Гость';
+
+        // Загружаем и обрабатываем JSON как строку
+        const response = await fetch('all.json');
+        const jsonText = await response.text();
+        const data = JSON.parse(jsonText.replace(/@username/g, '@' + username));
 
         // Создаем div элементы на основе данных
         data.forEach(item => {
