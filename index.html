@@ -15,7 +15,6 @@
 </header>
 
 <script>
-// Расширяем на весь экран
 const tg = window.Telegram.WebApp;
 tg.expand();
 
@@ -69,6 +68,10 @@ async function loadData() {
         });
         document.getElementById('div0').style.display = 'block';
 
+        // Скрываем кнопку "назад" на начальном экране
+        const backLink = document.querySelector('.back-link');
+        backLink.style.display = 'none';
+
         // Обработчик кликов по кнопкам
         let buttons = document.querySelectorAll('button');
         buttons.forEach(button => {
@@ -79,6 +82,9 @@ async function loadData() {
                     showForm();
                     return;
                 }
+
+                // Управляем видимостью кнопки "назад"
+                backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
 
                 panels.forEach(panel => {
                     panel.style.display = 'none';
@@ -92,17 +98,13 @@ async function loadData() {
         });
 
         // Обработчик для кнопки "назад"
-        document.querySelector('.back-link').addEventListener('click', (e) => {
+        backLink.addEventListener('click', (e) => {
             e.preventDefault();
-            const currentPanel = document.querySelector('.panel[style*="block"]');
-            if (currentPanel && currentPanel.id !== 'div0') {
-                document.querySelectorAll('.panel').forEach(panel => {
-                    panel.style.display = 'none';
-                });
-                document.getElementById('div0').style.display = 'block';
-            } else {
-                window.history.back();
-            }
+            panels.forEach(panel => {
+                panel.style.display = 'none';
+            });
+            document.getElementById('div0').style.display = 'block';
+            backLink.style.display = 'none';
         });
 
     } catch (error) {
