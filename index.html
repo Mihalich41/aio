@@ -34,7 +34,7 @@ async function loadData() {
             // Добавляем p и h3 элементы
             item.p.forEach(paragraphText => {
                 const p = document.createElement('p');
-                p.textContent = paragraphText;
+                p.innerHTML = paragraphText;
                 newDiv.appendChild(p);
             });
 
@@ -59,7 +59,7 @@ async function loadData() {
         // Скрыть все панели, кроме первой (div0)
         const panels = document.querySelectorAll('.panel');
         panels.forEach(panel => {
-            panel.style.display = 'none';  // Скрыть все
+            panel.style.display = 'none';  // Ск��ыть все
         });
         document.getElementById('div0').style.display = 'block';  // Показать только div0
 
@@ -88,7 +88,7 @@ async function loadData() {
             });
         });
     } catch (error) {
-        console.error('Ошибка при загрузке данных:', error);
+        console.error('Ош��бка при загрузке данных:', error);
     }
 }
 
@@ -128,7 +128,7 @@ function showForm() {
         if (username) document.getElementById('username').value = username;
     }
 
-    // Обработчик отправки формы
+    // Обра��отчик отправки формы
     document.getElementById('telegramForm').onsubmit = async function(event) {
         event.preventDefault(); // Предотвращаем обычное отправление формы
 
