@@ -59,8 +59,8 @@ function showForm() {
         if (await sendFormData(new FormData(this))) {
             submitButton.textContent = 'Отправлено!';
             setTimeout(() => {
-                backToMain();
                 formDiv.remove();
+                backToMain();
             }, 2000);
         } else {
             submitButton.disabled = false;
@@ -71,64 +71,57 @@ function showForm() {
 
 // Функция для отправки данных формы
 async function sendFormData(formData, courseTitle = '', button = null) {
-    // Если передана кнопка и она уже отключена, прерываем отправку
     if (button && button.disabled) return false;
     
-    // Отключаем кнопку если она передана
     if (button) {
         button.disabled = true;
         button.textContent = 'Отправка...';
     }
 
-    // Получаем название раздела из последнего шага (не считая открытие формы)
-    const section = window.userSteps[window.userSteps.length - 2] || 'Главная';
-
-    const data = {
-        username: formData.get('username') || '@' + (window.Telegram.WebApp.initDataUnsafe?.user?.username || 'Гость'),
-        message: formData.get('message'),
-        course: courseTitle,
-        steps: window.userSteps,
-        section: section
-    };
-
     try {
-        console.log('Отправляемые данные:', data);
+        let section = button ? button.textContent : 'Форма обратной связи';
 
-        const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
+        const data = {
+            username: formData.get('username') || '@' + (window.Telegram.WebApp.initDataUnsafe?.user?.username || 'Гость'),
+            message: formData.get('message'),
+            course: courseTitle,
+            steps: window.userSteps,
+            section: section
+        };
+
+        const response = await fetch('https://kvazigame.ru/api', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(data)
         });
 
-        if (response.ok) {
-            if (button) {
-                button.textContent = 'Отправлено!';
-                // Возвращаемся на главную через 2 секунды
-                setTimeout(() => {
-                    backToMain();
-                    // Возвращаем кнопку в исходное состояние
-                    button.disabled = false;
-                    button.textContent = 'Отправить';
-                }, 2000);
-            }
-            // Очищаем шаги после успешной отправки
-            window.userSteps = [];
-            return true;
-        } else {
-            const result = await response.json();
-            alert('Ошибка: ' + result.error);
-            return false;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const result = await response.json();
+        
+        if (button) {
+            button.textContent = 'Отправлено!';
+            setTimeout(() => {
+                backToMain();
+            }, 2000);
+        }
+        
+        return true;
+
     } catch (error) {
-        alert('Ошибка отправки: ' + error.message);
-        console.error('Ошибка при отправке:', error);
-        return false;
-    } finally {
-        // Возвращаем кнопку в исходное состояние в случае ошибки
-        if (button && button.textContent !== 'Отправлено!') {
-            button.disabled = false;
-            button.textContent = 'Отправить';
+        console.error('Error:', error);
+        if (button) {
+            button.textContent = 'Ошибка! Попробуйте позже';
+            setTimeout(() => {
+                button.disabled = false;
+                button.textContent = 'Отправить';
+            }, 2000);
         }
+        return false;
     }
 }
 
