@@ -144,7 +144,6 @@ function initAllHandlers() {
             if (e.target.disabled) return;
 
             addStep(e.target.textContent);
-            const targetPanelClass = e.target.classList[0];
             
             if (e.target.classList.contains('purchase')) {
                 const panel = e.target.closest('.panel');
@@ -158,11 +157,14 @@ function initAllHandlers() {
                 return;
             }
 
+            // Получаем первый класс кнопки как идентификатор целевой панели
+            const targetPanelId = e.target.classList[0];
+            
             panels.forEach(panel => panel.style.display = 'none');
-            const targetPanel = document.querySelector(`#${targetPanelClass}`);
+            const targetPanel = document.getElementById(targetPanelId);
             if (targetPanel) {
                 targetPanel.style.display = 'block';
-                backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
+                backLink.style.display = targetPanelId === 'div0' ? 'none' : 'block';
             }
         }
     });
