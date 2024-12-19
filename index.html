@@ -24,40 +24,20 @@ async function loadData() {
         const response = await fetch('game_data.json');
         const data = await response.json();
 
-        // Создаем div элементы на основе данных
         data.forEach(item => {
             const newDiv = document.createElement('div');
             newDiv.classList.add('panel');
             newDiv.id = item.id;
 
-            const h1 = document.createElement('h1');
-            h1.textContent = item.h1;
-            newDiv.appendChild(h1);
-
-            const h2 = document.createElement('h2');
-            h2.textContent = item.h2;
-            newDiv.appendChild(h2);
-
-            item.p.forEach(paragraphText => {
-                const p = document.createElement('p');
-                p.innerHTML = paragraphText;
-                newDiv.appendChild(p);
-            });
-
-            item.h3?.forEach(headingText => {
-                const h3 = document.createElement('h3');
-                h3.textContent = headingText;
-                newDiv.appendChild(h3);
-            });
-
-            item.buttons?.forEach(buttonData => {
-                const p = document.createElement('p');
-                const button = document.createElement('button');
-                button.classList.add(buttonData.class);
-                button.textContent = buttonData.text;
-                p.appendChild(button);
-                newDiv.appendChild(p);
-            });
+            newDiv.innerHTML = `
+                <h1>${item.h1}</h1>
+                <h2>${item.h2}</h2>
+                ${item.p.map(text => `<p>${text}</p>`).join('')}
+                ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
+                ${item.buttons ? item.buttons.map(btn => `
+                    <p><button class="${btn.class}">${btn.text}</button></p>
+                `).join('') : ''}
+            `;
 
             document.body.appendChild(newDiv);
         });
@@ -74,18 +54,15 @@ async function loadData() {
         backLink.style.display = 'none';
 
         // Обработчик кликов по кнопкам
-        let buttons = document.querySelectorAll('button');
-        buttons.forEach(button => {
-            button.addEventListener('click', e => {
+        document.addEventListener('click', e => {
+            if (e.target.tagName === 'BUTTON') {
+                addStep(e.target.textContent);
                 const targetPanelClass = e.target.classList[0];
 
                 if (targetPanelClass === 'formdiv') {
                     showForm();
                     return;
                 }
-
-                // Управляем видимостью кнопки "назад"
-                backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
 
                 panels.forEach(panel => {
                     panel.style.display = 'none';
@@ -94,13 +71,15 @@ async function loadData() {
                 const targetPanel = document.querySelector(`#${targetPanelClass}`);
                 if (targetPanel) {
                     targetPanel.style.display = 'block';
+                    backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
                 }
-            });
+            }
         });
 
         // Обработчик для кнопки "назад"
         backLink.addEventListener('click', (e) => {
             e.preventDefault();
+            addStep('Назад на главную');
             panels.forEach(panel => {
                 panel.style.display = 'none';
             });
@@ -113,7 +92,6 @@ async function loadData() {
     }
 }
 
-// Загружаем данные
 loadData();
 </script>
 

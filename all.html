@@ -33,102 +33,62 @@ async function loadData() {
             newDiv.classList.add('panel');
             newDiv.id = item.id;
 
-            const h1 = document.createElement('h1');
-            h1.innerHTML = item.h1;
-            newDiv.appendChild(h1);
-
-            const h2 = document.createElement('h2');
-            h2.innerHTML = item.h2;
-            if (item.h2class) {
-                h2.classList.add(item.h2class);
-            }
-            newDiv.appendChild(h2);
-
-            if (item.id !== 'div0') {
-                const form = document.createElement('form');
-                form.innerHTML = `
-                    <textarea id="message_${item.id}" placeholder="Ваши пожелания или вопросы" required></textarea>
-                `;
-                newDiv.appendChild(form);
-            }
-
-            item.buttons?.forEach(buttonData => {
-                const p = document.createElement('p');
-                const button = document.createElement('button');
-                button.classList.add(buttonData.class);
-                button.textContent = buttonData.text;
-                
-                if (buttonData.class === 'purchase') {
-                    button.addEventListener('click', async () => {
-                        const messageText = document.getElementById(`message_${item.id}`).value;
-                        const data = {
-                            username: '@' + username,
-                            course: item.h1,
-                            message: messageText
-                        };
-
-                        try {
-                            const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(data)
-                            });
-
-                            if (response.ok) {
-                                alert('Заявка отправлена успешно!');
-                            } else {
-                                alert('Произошла ошибка при отправке заявки');
-                            }
-                        } catch (error) {
-                            console.error('Ошибка:', error);
-                            alert('Произошла ошибка при отправке заявки');
-                        }
-                    });
-                }
-                
-                p.appendChild(button);
-                newDiv.appendChild(p);
-            });
+            newDiv.innerHTML = `
+                <h1>${item.h1}</h1>
+                <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
+                ${item.id !== 'div0' ? `
+                    <form>
+                        <textarea id="message_${item.id}" placeholder="Ваши пожелания или вопросы" required></textarea>
+                    </form>
+                ` : ''}
+                ${item.buttons?.map(btn => `
+                    <p><button class="${btn.class}">${btn.text}</button></p>
+                `).join('') || ''}
+            `;
 
             document.body.appendChild(newDiv);
         });
 
+        // Инициализация отображения
         const panels = document.querySelectorAll('.panel');
-        panels.forEach(panel => {
-            panel.style.display = 'none';
-        });
+        panels.forEach(panel => panel.style.display = 'none');
         document.getElementById('div0').style.display = 'block';
 
         // Скрываем кнопку "назад" на начальном экране
         const backLink = document.querySelector('.back-link');
         backLink.style.display = 'none';
 
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', e => {
-                if (e.target.classList.contains('purchase')) return;
-                
+        // Обработчик для кнопок навигации
+        document.addEventListener('click', async (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                addStep(e.target.textContent);
                 const targetPanelClass = e.target.classList[0];
+                
+                if (e.target.classList.contains('purchase')) {
+                    const panel = e.target.closest('.panel');
+                    const messageText = panel.querySelector('textarea')?.value;
+                    const courseTitle = panel.querySelector('h1').textContent;
+                    
+                    const formData = new FormData();
+                    formData.append('message', messageText);
+                    await sendFormData(formData, courseTitle, e.target);
+                    return;
+                }
 
-                // Управляем видимостью кнопки "назад"
-                backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
-
-                panels.forEach(panel => {
-                    panel.style.display = 'none';
-                });
-
+                panels.forEach(panel => panel.style.display = 'none');
                 const targetPanel = document.querySelector(`#${targetPanelClass}`);
                 if (targetPanel) {
                     targetPanel.style.display = 'block';
+                    backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
                 }
-            });
+            }
         });
 
         // Обработчик для кнопки "назад"
         backLink.addEventListener('click', (e) => {
             e.preventDefault();
-            panels.forEach(panel => {
-                panel.style.display = 'none';
-            });
+            addStep('Назад на главную');
+            panels.forEach(panel => panel.style.display = 'none');
             document.getElementById('div0').style.display = 'block';
             backLink.style.display = 'none';
         });
