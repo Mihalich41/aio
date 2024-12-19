@@ -6,6 +6,15 @@ function addStep(text) {
     window.userSteps.push(text);
 }
 
+// Функция для возврата на главную
+function backToMain() {
+    const panels = document.querySelectorAll('.panel');
+    panels.forEach(panel => panel.style.display = 'none');
+    document.getElementById('div0').style.display = 'block';
+    const backLink = document.querySelector('.back-link');
+    if (backLink) backLink.style.display = 'none';
+}
+
 // Функция для отображения формы обратной связи
 function showForm() {
     const panels = document.querySelectorAll('.panel');
@@ -50,9 +59,7 @@ function showForm() {
         if (await sendFormData(new FormData(this))) {
             submitButton.textContent = 'Отправлено!';
             setTimeout(() => {
-                const panels = document.querySelectorAll('.panel');
-                panels.forEach(panel => panel.style.display = 'none');
-                document.getElementById('div0').style.display = 'block';
+                backToMain();
                 formDiv.remove();
             }, 2000);
         } else {
@@ -96,7 +103,10 @@ async function sendFormData(formData, courseTitle = '', button = null) {
         if (response.ok) {
             if (button) {
                 button.textContent = 'Отправлено!';
+                // Возвращаемся на главную через 2 секунды
                 setTimeout(() => {
+                    backToMain();
+                    // Возвращаем кнопку в исходное состояние
                     button.disabled = false;
                     button.textContent = 'Отправить';
                 }, 2000);
@@ -122,7 +132,52 @@ async function sendFormData(formData, courseTitle = '', button = null) {
     }
 }
 
+// Функция для инициализации обработчиков
+function initAllHandlers() {
+    const panels = document.querySelectorAll('.panel');
+    const backLink = document.querySelector('.back-link');
+
+    // Обработчик для кнопок навигации
+    document.addEventListener('click', async (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            // Если кнопка уже отключена, прерываем выполнение
+            if (e.target.disabled) return;
+
+            addStep(e.target.textContent);
+            const targetPanelClass = e.target.classList[0];
+            
+            if (e.target.classList.contains('purchase')) {
+                const panel = e.target.closest('.panel');
+                const messageText = panel.querySelector('textarea')?.value;
+                const courseTitle = panel.querySelector('h1').textContent;
+                
+                const formData = new FormData();
+                formData.append('message', messageText);
+                
+                await sendFormData(formData, courseTitle, e.target);
+                return;
+            }
+
+            panels.forEach(panel => panel.style.display = 'none');
+            const targetPanel = document.querySelector(`#${targetPanelClass}`);
+            if (targetPanel) {
+                targetPanel.style.display = 'block';
+                backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
+            }
+        }
+    });
+
+    // Обработчик для кнопки "назад"
+    backLink?.addEventListener('click', (e) => {
+        e.preventDefault();
+        addStep('Назад на главную');
+        backToMain();
+    });
+}
+
 // Делаем функции доступными глобально
 window.showForm = showForm;
 window.sendFormData = sendFormData;
-window.addStep = addStep; 
+window.addStep = addStep;
+window.initAllHandlers = initAllHandlers;
+window.backToMain = backToMain; 

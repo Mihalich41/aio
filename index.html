@@ -42,50 +42,10 @@ async function loadData() {
             document.body.appendChild(newDiv);
         });
 
-        // Скрыть все панели, кроме первой (div0)
-        const panels = document.querySelectorAll('.panel');
-        panels.forEach(panel => {
-            panel.style.display = 'none';
-        });
+        // Инициализация отображения
         document.getElementById('div0').style.display = 'block';
-
-        // Скрываем кнопку "назад" на начальном экране
-        const backLink = document.querySelector('.back-link');
-        backLink.style.display = 'none';
-
-        // Обработчик кликов по кнопкам
-        document.addEventListener('click', e => {
-            if (e.target.tagName === 'BUTTON') {
-                addStep(e.target.textContent);
-                const targetPanelClass = e.target.classList[0];
-
-                if (targetPanelClass === 'formdiv') {
-                    showForm();
-                    return;
-                }
-
-                panels.forEach(panel => {
-                    panel.style.display = 'none';
-                });
-
-                const targetPanel = document.querySelector(`#${targetPanelClass}`);
-                if (targetPanel) {
-                    targetPanel.style.display = 'block';
-                    backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
-                }
-            }
-        });
-
-        // Обработчик для кнопки "назад"
-        backLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            addStep('Назад на главную');
-            panels.forEach(panel => {
-                panel.style.display = 'none';
-            });
-            document.getElementById('div0').style.display = 'block';
-            backLink.style.display = 'none';
-        });
+        // Инициализируем обработчики
+        initAllHandlers();
 
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);

@@ -50,48 +50,9 @@ async function loadData() {
         });
 
         // Инициализация отображения
-        const panels = document.querySelectorAll('.panel');
-        panels.forEach(panel => panel.style.display = 'none');
         document.getElementById('div0').style.display = 'block';
-
-        // Скрываем кнопку "назад" на начальном экране
-        const backLink = document.querySelector('.back-link');
-        backLink.style.display = 'none';
-
-        // Обработчик для кнопок навигации
-        document.addEventListener('click', async (e) => {
-            if (e.target.tagName === 'BUTTON') {
-                addStep(e.target.textContent);
-                const targetPanelClass = e.target.classList[0];
-                
-                if (e.target.classList.contains('purchase')) {
-                    const panel = e.target.closest('.panel');
-                    const messageText = panel.querySelector('textarea')?.value;
-                    const courseTitle = panel.querySelector('h1').textContent;
-                    
-                    const formData = new FormData();
-                    formData.append('message', messageText);
-                    await sendFormData(formData, courseTitle, e.target);
-                    return;
-                }
-
-                panels.forEach(panel => panel.style.display = 'none');
-                const targetPanel = document.querySelector(`#${targetPanelClass}`);
-                if (targetPanel) {
-                    targetPanel.style.display = 'block';
-                    backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
-                }
-            }
-        });
-
-        // Обработчик для кнопки "назад"
-        backLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            addStep('Назад на главную');
-            panels.forEach(panel => panel.style.display = 'none');
-            document.getElementById('div0').style.display = 'block';
-            backLink.style.display = 'none';
-        });
+        // Инициализируем обработчики
+        initAllHandlers();
 
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);

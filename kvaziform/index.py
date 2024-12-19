@@ -9,7 +9,7 @@ def send_telegram_message(message):
     payload = {
         'chat_id': CHAT_ID,
         'text': message,
-        'parse_mode': 'HTML'
+        'parse_mode': 'HTML'  # Добавляем поддержку HTML форматирования
     }
     response = requests.post(url, data=payload)
     return response.json()
@@ -45,11 +45,10 @@ def handler(event, context):
             course = body.get('course', '')
 
             # Формируем текст сообщения с HTML форматированием
-            telegram_message = f"<b>Новое сообщение</b>\n\n"
-            telegram_message += f"От: {username}\n"
-            telegram_message += f"Раздел: <b>{section}</b>\n"
+            telegram_message = f"От: {username}\n"
+            telegram_message += f"<b>{section}</b>\n"
             if course:
-                telegram_message += f"Курс: <b>{course}</b>\n"
+                telegram_message += f"<b>Доступ к разделу: {course}</b>\n"
             telegram_message += f"\nСообщение:\n<i>{message}</i>\n"
             
             if steps:

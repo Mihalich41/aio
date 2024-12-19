@@ -1,20 +1,23 @@
-/* Общие стили для всех страниц */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+/* Стили для кнопок */
+button {
+    border: 0;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 30px;
+    width: 200px;
+    height: 60px;
+    padding: 0 30px;
+    text-shadow: 0 0 black, 0 1px black, 1px 0 black, 0 0 black;
+    color: var(--tg-theme-button-text-color);
+    background: var(--tg-theme-button-color);
+    cursor: pointer;
 }
 
-body {
-    background: var(--tg-theme-bg-color);
-    text-align: center;
-    font-family: sans-serif;
-    color: var(--tg-theme-text-color);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding-top: 70px;
-}
+button:hover {
+    background: var(--tg-theme-secondary-bg-color);
+} 
 
 /* Стили для header */
 header {
@@ -45,128 +48,10 @@ header {
     font-size: 1.5em;
     flex: 1;
     text-align: right;
-    padding: 5px 15px;
-    transition: all 0.3s ease;
 }
 
-h1 {
-    font-size: 1.8em;
-    margin-top: 20px;
-}
-
-h2 {
-    font-size: 1.4em;
-}
-
-h2.price {
-    font-weight: bold;
-    color: var(--tg-theme-link-color);
-}
-
-h3 {
-    font-size: 1.2em;
-    color: #888;
-}
-
-/* Стили для ссылок */
-a {
-    color: var(--tg-theme-link-color);
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 10px;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Стили для панелей */
-div.panel {
-    display: none;
-    flex: 1;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: center;
-}
-
-div.panel p {
-    display: inline-block;
-    margin: 5px;
-}
-
-/* Стили для кнопок */
-button {
-    border: 0;
-    text-transform: uppercase;
-    font-size: 20px;
-    font-weight: bold;
-    border-radius: 5px;
-    margin: 10px;
-    min-width: 200px;
-    max-width: 100%;
-    height: 60px;
-    padding: 0 30px;
-    text-shadow: 0 0 black, 0 1px black, 1px 0 black, 0 0 black;
-    color: var(--tg-theme-button-text-color);
-    background: var(--tg-theme-button-color);
-    cursor: pointer;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-button:hover {
-    background: var(--tg-theme-secondary-bg-color);
-}
-
-/* Стили для формы */
-form {
-    background-color: var(--tg-theme-secondary-bg-color);
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    margin: 20px auto;
-}
-
-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1em;
-    min-height: 100px;
-    resize: vertical;
-}
-
-/* Мобильные стили */
+/* Обновляем мобильные стили */
 @media screen and (max-width: 768px) {
-    body {
-        padding: 10px;
-        padding-top: 70px;
-    }
-
-    h1 {
-        font-size: 1.6em;
-    }
-
-    h2 {
-        font-size: 1.2em;
-    }
-
-    button {
-        font-size: 18px;
-        min-width: 150px;
-    }
-
-    header {
-        padding: 15px;
-    }
-
     .logo {
         font-size: 1.3em;
     }
@@ -175,3 +60,11 @@ form textarea {
         font-size: 1.3em;
     }
 } 
+
+.panel {
+    display: none;
+}
+
+.back-link {
+    display: none;
+}
