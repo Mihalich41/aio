@@ -62,7 +62,7 @@ h3 {
 }
 
 p {
-    margin-bottom: 1.2em;
+    margin-bottom: 1.4em;
     line-height: 1.5;
     color: var(--tg-theme-text-color, #000);
 }
@@ -73,13 +73,12 @@ button {
     border: none;
     margin: 0 auto;
     border-radius: 1em;
-    padding: 1em 1.25em;
+    padding: 0.8em 1em;
     font-size: 1.5em;
     font-weight: bold;
     cursor: pointer;
     max-width: 100%;
     min-width: 12.5em;  /* 200px */
-    margin-bottom: 0.625em;
     transition: opacity 0.2s;
 }
 
