@@ -176,11 +176,12 @@ button.form {
 p.emoji {
     display: flex;
     align-items: center;
+    gap: 0;
     text-align: left;
 }
 
 p.emoji .emoji {
     font-size: 5em;
     line-height: 1;
-    padding: 0 2em;
+    padding: 0 0.1em;
 } 
