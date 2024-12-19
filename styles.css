@@ -80,11 +80,6 @@ button {
     max-width: 100%;
     min-width: 12.5em;  /* 200px */
     transition: opacity 0.2s;
-    text-shadow: 
-        -1px -1px 0 var(--tg-theme-bg-color, #fff),
-        1px -1px 0 var(--tg-theme-bg-color, #fff),
-        -1px 1px 0 var(--tg-theme-bg-color, #fff),
-        1px 1px 0 var(--tg-theme-bg-color, #fff);
 }
 
 button:disabled {
@@ -175,4 +170,17 @@ button.form {
         padding: 1em 1em;
         min-width: 9.375em;  /* 150px */
     }
+} 
+
+/* Стиль для параграфа с большим эмодзи слева */
+p.emoji {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    text-align: left;
+}
+
+p.emoji .emoji {
+    font-size: 3em;
+    line-height: 1;
 } 
