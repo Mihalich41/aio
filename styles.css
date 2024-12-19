@@ -4,7 +4,7 @@ body {
     padding: 1.25em;
     background-color: var(--tg-theme-bg-color, #fff);
     color: var(--tg-theme-text-color, #000);
-    font-size: 16px;
+    font-size: 18px;
 }
 
 header {
@@ -34,13 +34,13 @@ a, .back-link {
 }
 
 h1 {
-    font-size: 1.5em;  /* 24px */
+    font-size: 1.6em; 
     margin-bottom: 0.938em;
     color: var(--tg-theme-text-color, #000);
 }
 
 h2 {
-    font-size: 1.125em;  /* 18px */
+    font-size: 1.4em;  /* 18px */
     margin-bottom: 0.938em;
     color: var(--tg-theme-text-color, #000);
 }
@@ -55,14 +55,14 @@ h2.price {
 }
 
 h3 {
-    font-size: 1.25em;  /* 20px */
+    font-size: 1.4em;  /* 20px */
     margin-bottom: 0.625em;
     color: var(--tg-theme-link-color, #2481cc);
     font-weight: bold;
 }
 
 p {
-    margin-bottom: 0.938em;
+    margin-bottom: 1.2em;
     line-height: 1.5;
     color: var(--tg-theme-text-color, #000);
 }
@@ -71,11 +71,11 @@ button {
     background-color: var(--tg-theme-button-color, #2481cc);
     color: var(--tg-theme-button-text-color, #ffffff);
     border: none;
-    border-radius: 0.5em;
-    padding: 1.25em 1.25em;
-    font-size: 1.4em;
+    border-radius: 1em;
+    padding: 1em 1.25em;
+    font-size: 1.5em;
+    font-weight: bold;
     cursor: pointer;
-    width: 100%;
     max-width: 100%;
     min-width: 12.5em;  /* 200px */
     margin-bottom: 0.625em;
