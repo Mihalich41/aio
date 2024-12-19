@@ -15,27 +15,23 @@ function backToMain() {
     if (backLink) backLink.style.display = 'none';
 }
 
-// Функция для отображения формы обратной связи
-function showForm() {
+// Функция для создания и показа формы
+function showCustomForm(title) {
     const panels = document.querySelectorAll('.panel');
     panels.forEach(panel => panel.style.display = 'none');
     
     const formDiv = document.createElement('div');
     formDiv.classList.add('form-panel');
-
     formDiv.innerHTML = `
-        <h2>Отправить сообщение в Telegram</h2>
+        <h1>${title}</h1>
         <form id="telegramForm">
             <label for="username">Ваш Telegram логин:</label>
             <input type="text" id="username" name="username" required><br><br>
-
             <label for="message">Сообщение:</label>
             <textarea id="message" name="message" required></textarea><br><br>
-
-            <button type="submit">Отправить</button>
+            <button type="submit" class="form">Отправить</button>
         </form>
     `;
-
     document.body.appendChild(formDiv);
 
     const tg = window.Telegram.WebApp;
@@ -46,47 +42,28 @@ function showForm() {
         if (username) document.getElementById('username').value = username;
     }
 
-    addStep('Открыта форма обратной связи');
-
     document.getElementById('telegramForm').onsubmit = async function(event) {
         event.preventDefault();
-        const submitButton = this.querySelector('button[type="submit"]');
-        if (submitButton.disabled) return;
-        
-        submitButton.disabled = true;
-        submitButton.textContent = 'Отправка...';
-        
-        if (await sendFormData(new FormData(this))) {
-            submitButton.textContent = 'Отправлено!';
-            setTimeout(() => {
-                formDiv.remove();
-                backToMain();
-            }, 2000);
-        } else {
-            submitButton.disabled = false;
-            submitButton.textContent = 'Отправить';
-        }
+        const formData = new FormData(this);
+        await sendFormData(formData, title);
     };
 }
 
 // Функция для отправки данных формы
-async function sendFormData(formData, courseTitle = '', button = null) {
-    if (button && button.disabled) return false;
+async function sendFormData(formData, title = '') {
+    const submitButton = document.querySelector('button[type="submit"]');
+    if (submitButton.disabled) return false;
     
-    if (button) {
-        button.disabled = true;
-        button.textContent = 'Отправка...';
-    }
+    submitButton.disabled = true;
+    submitButton.textContent = 'Отправка...';
 
     try {
-        let section = button ? button.textContent : 'Форма обратной связи';
-
         const data = {
             username: formData.get('username') || '@' + (window.Telegram.WebApp.initDataUnsafe?.user?.username || 'Гость'),
             message: formData.get('message'),
-            course: courseTitle,
+            course: title,
             steps: window.userSteps,
-            section: section
+            section: title || 'Форма обратной связи'
         };
 
         const response = await fetch('https://kvazigame.ru/api', {
@@ -101,26 +78,24 @@ async function sendFormData(formData, courseTitle = '', button = null) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const result = await response.json();
+        await response.json();
+        submitButton.textContent = 'Отправлено!';
         
-        if (button) {
-            button.textContent = 'Отправлено!';
-            setTimeout(() => {
-                backToMain();
-            }, 2000);
-        }
+        setTimeout(() => {
+            const formPanel = document.querySelector('.form-panel');
+            if (formPanel) formPanel.remove();
+            backToMain();
+        }, 2000);
         
         return true;
 
     } catch (error) {
         console.error('Error:', error);
-        if (button) {
-            button.textContent = 'Ошибка! Попробуйте позже';
-            setTimeout(() => {
-                button.disabled = false;
-                button.textContent = 'Отправить';
-            }, 2000);
-        }
+        submitButton.textContent = 'Ошибка! Попробуйте позже';
+        setTimeout(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Отправить';
+        }, 2000);
         return false;
     }
 }
@@ -133,20 +108,22 @@ function initAllHandlers() {
     // Обработчик для кнопок навигации
     document.addEventListener('click', async (e) => {
         if (e.target.tagName === 'BUTTON') {
-            // Если кнопка уже отключена, прерываем выполнение
             if (e.target.disabled) return;
 
             addStep(e.target.textContent);
             
             if (e.target.classList.contains('purchase')) {
-                const panel = e.target.closest('.panel');
-                const messageText = panel.querySelector('textarea')?.value;
-                const courseTitle = panel.querySelector('h1').textContent;
-                
-                const formData = new FormData();
-                formData.append('message', messageText);
-                
-                await sendFormData(formData, courseTitle, e.target);
+                showCustomForm(e.target.textContent);
+                return;
+            }
+
+            if (e.target.classList.contains('formdiv')) {
+                showCustomForm('Написать сообщение');
+                return;
+            }
+
+            if (e.target.classList.contains('all')) {
+                window.location.href = 'all.html';
                 return;
             }
 
@@ -171,7 +148,7 @@ function initAllHandlers() {
 }
 
 // Делаем функции доступными глобально
-window.showForm = showForm;
+window.showForm = showCustomForm;
 window.sendFormData = sendFormData;
 window.addStep = addStep;
 window.initAllHandlers = initAllHandlers;
