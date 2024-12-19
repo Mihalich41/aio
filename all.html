@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script type="text/javascript" src="form.js"></script>
     <link rel="stylesheet" href="styles.css">
     <title>Все возможности</title>
 </head>
@@ -14,23 +15,19 @@
     <a href="#" class="back-link">назад</a>
 </header>
 
-<script>
-// Расширяем на весь экран
+<script type="text/javascript">
 const tg = window.Telegram.WebApp;
 tg.expand();
 
 async function loadData() {
     try {
-        // Получаем username из Telegram
         const userData = tg.initDataUnsafe;
         let username = userData?.user?.username || 'Гость';
 
-        // Загружаем и обрабатываем JSON как строку
         const response = await fetch('all.json');
         const jsonText = await response.text();
         const data = JSON.parse(jsonText.replace(/@username/g, '@' + username));
 
-        // Создаем div элементы на основе данных
         data.forEach(item => {
             const newDiv = document.createElement('div');
             newDiv.classList.add('panel');
@@ -47,7 +44,6 @@ async function loadData() {
             }
             newDiv.appendChild(h2);
 
-            // Добавляем форму для всех div кроме div0
             if (item.id !== 'div0') {
                 const form = document.createElement('form');
                 form.innerHTML = `
@@ -62,7 +58,6 @@ async function loadData() {
                 button.classList.add(buttonData.class);
                 button.textContent = buttonData.text;
                 
-                // Добавляем обработчик для кнопки "Приобрести"
                 if (buttonData.class === 'purchase') {
                     button.addEventListener('click', async () => {
                         const messageText = document.getElementById(`message_${item.id}`).value;
@@ -98,19 +93,25 @@ async function loadData() {
             document.body.appendChild(newDiv);
         });
 
-        // Скрыть все панели, кроме первой (div0)
         const panels = document.querySelectorAll('.panel');
         panels.forEach(panel => {
             panel.style.display = 'none';
         });
         document.getElementById('div0').style.display = 'block';
 
-        // Обработчик кликов по кнопкам навигации
+        // Скрываем кнопку "назад" на начальном экране
+        const backLink = document.querySelector('.back-link');
+        backLink.style.display = 'none';
+
         document.querySelectorAll('button').forEach(button => {
             button.addEventListener('click', e => {
-                if (e.target.classList.contains('purchase')) return; // Пропускаем кнопки покупки
+                if (e.target.classList.contains('purchase')) return;
                 
                 const targetPanelClass = e.target.classList[0];
+
+                // Управляем видимостью кнопки "назад"
+                backLink.style.display = targetPanelClass === 'div0' ? 'none' : 'block';
+
                 panels.forEach(panel => {
                     panel.style.display = 'none';
                 });
@@ -123,17 +124,13 @@ async function loadData() {
         });
 
         // Обработчик для кнопки "назад"
-        document.querySelector('.back-link').addEventListener('click', (e) => {
+        backLink.addEventListener('click', (e) => {
             e.preventDefault();
-            const currentPanel = document.querySelector('.panel[style*="block"]');
-            if (currentPanel && currentPanel.id !== 'div0') {
-                document.querySelectorAll('.panel').forEach(panel => {
-                    panel.style.display = 'none';
-                });
-                document.getElementById('div0').style.display = 'block';
-            } else {
-                window.history.back();
-            }
+            panels.forEach(panel => {
+                panel.style.display = 'none';
+            });
+            document.getElementById('div0').style.display = 'block';
+            backLink.style.display = 'none';
         });
 
     } catch (error) {
@@ -141,7 +138,6 @@ async function loadData() {
     }
 }
 
-// Загружаем данные
 loadData();
 </script>
 
