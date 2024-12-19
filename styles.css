@@ -73,8 +73,8 @@ button {
     border: none;
     margin: 0 auto;
     border-radius: 1em;
-    padding: 0.1em 1em;
-    font-size: 1.4em;
+    padding: 0.5em 1em;
+    font-size: 1.5em;
     font-weight: bold;
     cursor: pointer;
     max-width: 100%;
@@ -139,6 +139,27 @@ textarea {
     color: #f44336;
 }
 
+button.div1,
+button.div2,
+button.div3,
+button.div4,
+button.div5,
+button.div6,
+button.div7,
+button.div8,
+button.div9,
+button.div10 {
+    background-color: var(--tg-theme-button-color, #2481cc);
+}
+
+button.purchase {
+    background-color: var(--tg-theme-button-color, #2481cc);
+}
+
+button.form {
+    background-color: var(--tg-theme-button-color, #2481cc);
+}
+
 @media (max-width: 480px) {
     body {
         padding: 0.938em;
@@ -149,4 +170,17 @@ textarea {
         padding: 1em 1em;
         min-width: 9.375em;  /* 150px */
     }
+} 
+
+/* Стиль для параграфа с большим эмодзи слева */
+p.emoji {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+p.emoji .emoji {
+    font-size: 5em;
+    line-height: 1;
+    padding: 0 2em;
 } 
