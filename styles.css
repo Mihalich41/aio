@@ -172,15 +172,14 @@ button.form {
     }
 } 
 
-/* Стиль для параграфа с большим эмодзи слева */
 p.emoji {
     display: flex;
     align-items: center;
-    gap: 1em;
+    gap: 2em;
     text-align: left;
 }
 
 p.emoji .emoji {
-    font-size:5em;
+    font-size: 5em;
     line-height: 1;
 } 
