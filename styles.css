@@ -1,32 +1,27 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     margin: 0;
-    padding: 1.25em;
+    padding: 20px;
     background-color: var(--tg-theme-bg-color, #fff);
     color: var(--tg-theme-text-color, #000);
-    font-size: 18px; text-align: center;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.25em;
+    margin-bottom: 20px;
 }
 
 .logo {
     font-weight: bold;
-    font-size: 1.5em;  /* 24px */
-    color: var(--tg-theme-link-color, #2481cc);
-}
-
-a, .back-link {
-    color: var(--tg-theme-link-color, #2481cc);
-    text-decoration: none;
+    font-size: 20px;
 }
 
 .back-link {
     display: none;
+    color: var(--tg-theme-link-color, #2481cc);
+    text-decoration: none;
 }
 
 .panel {
@@ -34,14 +29,14 @@ a, .back-link {
 }
 
 h1 {
-    font-size: 1.6em; 
-    margin-bottom: 0.938em;
+    font-size: 24px;
+    margin-bottom: 15px;
     color: var(--tg-theme-text-color, #000);
 }
 
 h2 {
-    font-size: 1.4em;  /* 18px */
-    margin-bottom: 0.938em;
+    font-size: 18px;
+    margin-bottom: 15px;
     color: var(--tg-theme-text-color, #000);
 }
 
@@ -49,20 +44,14 @@ h2.hint {
     color: var(--tg-theme-hint-color, #999);
 }
 
-h2.price {
-    color: var(--tg-theme-link-color, #2481cc);
-    font-weight: bold;
-}
-
 h3 {
-    font-size: 1.4em;  /* 20px */
-    margin-bottom: 0.625em;
-    color: var(--tg-theme-link-color, #2481cc);
-    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--tg-theme-text-color, #000);
 }
 
 p {
-    margin-bottom: 1.4em;
+    margin-bottom: 15px;
     line-height: 1.5;
     color: var(--tg-theme-text-color, #000);
 }
@@ -71,15 +60,18 @@ button {
     background-color: var(--tg-theme-button-color, #2481cc);
     color: var(--tg-theme-button-text-color, #ffffff);
     border: none;
-    margin: 0 auto;
-    border-radius: 1em;
-    padding: 0.8em 1em;
-    font-size: 1.5em;
-    font-weight: bold;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
     cursor: pointer;
-    max-width: 100%;
-    min-width: 12.5em;  /* 200px */
+    width: 100%;
+    margin-bottom: 10px;
     transition: opacity 0.2s;
+    text-shadow: 
+        -1px -1px 0 var(--tg-theme-bg-color, #fff),
+        1px -1px 0 var(--tg-theme-bg-color, #fff),
+        -1px 1px 0 var(--tg-theme-bg-color, #fff),
+        1px 1px 0 var(--tg-theme-bg-color, #fff);
 }
 
 button:disabled {
@@ -93,42 +85,42 @@ button:hover:not(:disabled) {
 
 .form-panel {
     background-color: var(--tg-theme-bg-color, #fff);
-    padding: 1.25em;
-    border-radius: 0.625em;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 form {
-    margin-top: 1.25em;
+    margin-top: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 0.313em;
+    margin-bottom: 5px;
     color: var(--tg-theme-text-color, #000);
 }
 
 input[type="text"],
 textarea {
     width: 100%;
-    padding: 0.625em;
-    margin-bottom: 0.938em;
+    padding: 10px;
+    margin-bottom: 15px;
     border: 1px solid var(--tg-theme-hint-color, #999);
-    border-radius: 0.5em;
+    border-radius: 8px;
     background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
     color: var(--tg-theme-text-color, #000);
     box-sizing: border-box;
 }
 
 textarea {
-    height: 6.25em;  /* 100px */
+    height: 100px;
     resize: vertical;
 }
 
 .hint {
     color: var(--tg-theme-hint-color, #999);
-    font-size: 0.875em;  /* 14px */
-    margin-top: -0.625em;
-    margin-bottom: 0.938em;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 15px;
 }
 
 .success {
@@ -139,6 +131,26 @@ textarea {
     color: #f44336;
 }
 
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Стили для кнопок навигации */
 button.div1,
 button.div2,
 button.div3,
@@ -152,22 +164,12 @@ button.div10 {
     background-color: var(--tg-theme-button-color, #2481cc);
 }
 
+/* Стили для кнопок покупки */
 button.purchase {
     background-color: var(--tg-theme-button-color, #2481cc);
 }
 
+/* Стили для кнопки формы */
 button.form {
     background-color: var(--tg-theme-button-color, #2481cc);
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 0.938em;
-        font-size: 14px;  /* Уменьшаем базовый размер шрифта на мобильных */
-    }
-
-    button {
-        padding: 1em 1em;
-        min-width: 9.375em;  /* 150px */
-    }
 } 
