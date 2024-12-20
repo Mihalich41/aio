@@ -18,48 +18,7 @@
 <script type="text/javascript">
 const tg = window.Telegram.WebApp;
 tg.expand();
-
-async function loadData() {
-    try {
-        const userData = tg.initDataUnsafe;
-        let username = userData?.user?.username || 'Гость';
-
-        const response = await fetch('all.json');
-        const jsonText = await response.text();
-        const data = JSON.parse(jsonText.replace(/@username/g, '@' + username));
-
-        data.forEach(item => {
-            const newDiv = document.createElement('div');
-            newDiv.classList.add('panel');
-            newDiv.id = item.id;
-
-            newDiv.innerHTML = `
-                <h1>${item.h1}</h1>
-                <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
-                ${item.id !== 'div0' ? `
-                    <form>
-                        <textarea id="message_${item.id}" placeholder="Ваши пожелания или вопросы" required></textarea>
-                    </form>
-                ` : ''}
-                ${item.buttons?.map(btn => `
-                    <p><button class="${btn.class}">${btn.text}</button></p>
-                `).join('') || ''}
-            `;
-
-            document.body.appendChild(newDiv);
-        });
-
-        // Инициализация отображения
-        document.getElementById('div0').style.display = 'block';
-        // Инициализируем обработчики
-        initAllHandlers();
-
-    } catch (error) {
-        console.error('Ошибка при загрузке данных:', error);
-    }
-}
-
-loadData();
+loadData('all.json');
 </script>
 
 </body>

@@ -15,6 +15,66 @@ function backToMain() {
     if (backLink) backLink.style.display = 'none';
 }
 
+// Общая функция для создания панелей
+async function createPanels(data, container) {
+    data.forEach(item => {
+        const newDiv = document.createElement('div');
+        newDiv.classList.add('panel');
+        newDiv.id = item.id;
+
+        newDiv.innerHTML = `
+            <h1>${item.h1}</h1>
+            <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
+            ${item.p ? item.p.map(p => {
+                if (typeof p === 'object') {
+                    return `<p class="${p.class}">${p.text}</p>`;
+                }
+                return `<p>${p}</p>`;
+            }).join('') : ''}
+            ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
+            ${item.id !== 'div0' ? `
+                <form>
+                    <textarea id="message_${item.id}" placeholder="Введите дополнительные уточнения или вопросы" required></textarea>
+                </form>
+            ` : ''}
+            ${item.buttons ? item.buttons.map(btn => `
+                <p><button class="${btn.class}">${btn.text}</button></p>
+            `).join('') : ''}
+        `;
+
+        container.appendChild(newDiv);
+    });
+}
+
+// Общая функция для загрузки данных
+async function loadData(jsonFile) {
+    try {
+        const tg = window.Telegram.WebApp;
+        const userData = tg.initDataUnsafe;
+        let username = userData?.user?.username || 'Гость';
+
+        const response = await fetch(jsonFile);
+        let data;
+        
+        if (jsonFile.includes('all.json')) {
+            const jsonText = await response.text();
+            data = JSON.parse(jsonText.replace(/@username/g, '@' + username));
+        } else {
+            data = await response.json();
+        }
+
+        await createPanels(data, document.body);
+
+        // Инициализация отображения
+        document.getElementById('div0').style.display = 'block';
+        // Инициализируем обработчики
+        initAllHandlers();
+
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
+}
+
 // Функция для создания и показа формы
 function showCustomForm(title) {
     const panels = document.querySelectorAll('.panel');
@@ -28,18 +88,16 @@ function showCustomForm(title) {
             <label for="username">Ваш Telegram логин:</label>
             <input type="text" id="username" name="username" required><br><br>
             <label for="message">Сообщение:</label>
-            <textarea id="message" name="message" required></textarea><br><br>
+            <textarea id="message" name="message" placeholder="Введите дополнительные уточнения или вопросы" required></textarea><br><br>
             <button type="submit" class="form">Отправить</button>
         </form>
     `;
     document.body.appendChild(formDiv);
 
-    const tg = window.Telegram.WebApp;
     const userData = tg.initDataUnsafe;
-
     if (userData && userData.user) {
         const username = userData.user.username;
-        if (username) document.getElementById('username').value = username;
+        if (username) document.getElementById('username').value = '@' + username;
     }
 
     document.getElementById('telegramForm').onsubmit = async function(event) {
@@ -70,15 +128,16 @@ async function sendFormData(formData, title = '') {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify(data)
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Ошибка сервера: ${response.status}`);
         }
 
-        await response.json();
+        const result = await response.json();
         submitButton.textContent = 'Отправлено!';
         
         setTimeout(() => {
@@ -90,12 +149,21 @@ async function sendFormData(formData, title = '') {
         return true;
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Ошибка:', error);
+        submitButton.disabled = false;
         submitButton.textContent = 'Ошибка! Попробуйте позже';
+        
+        // Показываем пользователю сообщение об ошибке
+        const errorMessage = document.createElement('div');
+        errorMessage.classList.add('error');
+        errorMessage.textContent = 'Произошла ошибка при отправке. Пожалуйста, попробуйте позже.';
+        submitButton.parentNode.insertBefore(errorMessage, submitButton.nextSibling);
+        
         setTimeout(() => {
-            submitButton.disabled = false;
+            errorMessage.remove();
             submitButton.textContent = 'Отправить';
-        }, 2000);
+        }, 3000);
+        
         return false;
     }
 }
@@ -113,7 +181,7 @@ function initAllHandlers() {
             addStep(e.target.textContent);
             
             if (e.target.classList.contains('purchase')) {
-                showCustomForm(e.target.textContent);
+                showCustomForm(e.target.closest('.panel').querySelector('h1').textContent);
                 return;
             }
 
@@ -152,4 +220,5 @@ window.showForm = showCustomForm;
 window.sendFormData = sendFormData;
 window.addStep = addStep;
 window.initAllHandlers = initAllHandlers;
-window.backToMain = backToMain; 
+window.backToMain = backToMain;
+window.loadData = loadData; 

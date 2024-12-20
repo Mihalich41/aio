@@ -18,46 +18,7 @@
 <script type="text/javascript">
 const tg = window.Telegram.WebApp;
 tg.expand();
-
-async function loadData() {
-    try {
-        const response = await fetch('game_data.json');
-        const data = await response.json();
-
-        data.forEach(item => {
-            const newDiv = document.createElement('div');
-            newDiv.classList.add('panel');
-            newDiv.id = item.id;
-
-            newDiv.innerHTML = `
-                <h1>${item.h1}</h1>
-                <h2>${item.h2}</h2>
-                ${item.p.map(p => {
-                    if (typeof p === 'object') {
-                        return `<p class="${p.class}">${p.text}</p>`;
-                    }
-                    return `<p>${p}</p>`;
-                }).join('')}
-                ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
-                ${item.buttons ? item.buttons.map(btn => `
-                    <p><button class="${btn.class}">${btn.text}</button></p>
-                `).join('') : ''}
-            `;
-
-            document.body.appendChild(newDiv);
-        });
-
-        // Инициализация отображения
-        document.getElementById('div0').style.display = 'block';
-        // Инициализируем обработчики
-        initAllHandlers();
-
-    } catch (error) {
-        console.error('Ошибка при загрузке данных:', error);
-    }
-}
-
-loadData();
+loadData('game_data.json');
 </script>
 
 </body>
