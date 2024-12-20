@@ -57,7 +57,6 @@ h2.price {
 h3 {
     font-size: 1.4em;  /* 20px */
     margin-bottom: 0.625em;
-    color: var(--tg-theme-link-color, #2481cc);
     font-weight: bold;
 }
 
@@ -178,6 +177,7 @@ p.emoji {
     align-items: center;
     gap: 0;
     text-align: left;
+    color: var(--tg-theme-link-color, #2481cc);
 }
 
 p.emoji .emoji {

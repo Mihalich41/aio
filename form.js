@@ -10,6 +10,11 @@ function addStep(text) {
 function backToMain() {
     const panels = document.querySelectorAll('.panel');
     panels.forEach(panel => panel.style.display = 'none');
+    
+    // Удаляем форму, если она есть
+    const formPanel = document.querySelector('.form-panel');
+    if (formPanel) formPanel.remove();
+    
     document.getElementById('div0').style.display = 'block';
     const backLink = document.querySelector('.back-link');
     if (backLink) backLink.style.display = 'none';
@@ -32,11 +37,6 @@ async function createPanels(data, container) {
                 return `<p>${p}</p>`;
             }).join('') : ''}
             ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
-            ${item.id !== 'div0' ? `
-                <form>
-                    <textarea id="message_${item.id}" placeholder="Введите дополнительные уточнения или вопросы" required></textarea>
-                </form>
-            ` : ''}
             ${item.buttons ? item.buttons.map(btn => `
                 <p><button class="${btn.class}">${btn.text}</button></p>
             `).join('') : ''}
