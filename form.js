@@ -124,20 +124,29 @@ async function sendFormData(formData, title = '') {
             section: title || 'Форма обратной связи'
         };
 
+        console.log('Отправляемые данные:', data); // Для отладки
+
         const response = await fetch('https://kvazigame.ru/api', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Origin': window.location.origin
             },
             body: JSON.stringify(data)
         });
 
+        console.log('Статус ответа:', response.status); // Для отладки
+
         if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Ответ сервера:', errorText); // Для отладки
             throw new Error(`Ошибка сервера: ${response.status}`);
         }
 
         const result = await response.json();
+        console.log('Успешный ответ:', result); // Для отладки
+
         submitButton.textContent = 'Отправлено!';
         
         setTimeout(() => {
@@ -162,6 +171,7 @@ async function sendFormData(formData, title = '') {
         setTimeout(() => {
             errorMessage.remove();
             submitButton.textContent = 'Отправить';
+            submitButton.disabled = false; // Разблокируем кнопку
         }, 3000);
         
         return false;
@@ -181,7 +191,7 @@ function initAllHandlers() {
             addStep(e.target.textContent);
             
             if (e.target.classList.contains('purchase')) {
-                showCustomForm(e.target.closest('.panel').querySelector('h1').textContent);
+                showCustomForm(e.target.textContent);
                 return;
             }
 
