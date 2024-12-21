@@ -30,17 +30,20 @@ async function createPanels(data, container) {
         newDiv.innerHTML = `
         <h1>${item.h1}</h1>
         <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
-        ${item.p ? Array.isArray(item.p) ? item.p.map(p => {
+        ${item.p ? item.p.map(p => {
             if (typeof p === 'object') {
-                return `<p class="${p.class}">${p.texts}</p>`;
+                // Преобразуем массив texts, заменяя символы новой строки на <br>
+                const textWithBreaks = p.texts.map(text => text.replace(/\n/g, '<br>')).join('<br>');
+                return `<p class="${p.class}"><span class="emoji">${p.emoji}</span>${textWithBreaks}</p>`;
             }
             return `<p>${p}</p>`;
-        }).join('') : `<p>${item.p}</p>` : ''}
+        }).join('') : ''}
         ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
         ${item.buttons ? item.buttons.map(btn => `
             <p><button class="${btn.class}">${btn.text}</button></p>
         `).join('') : ''}
     `;
+    
     
     
 
