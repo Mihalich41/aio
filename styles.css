@@ -73,11 +73,11 @@ button {
     margin: 0 auto;
     border-radius: 1em;
     padding: 0.3em 0.3em;
-    font-size: 1.4em;
+    font-size: 1.3em;
     font-weight: bold;
     cursor: pointer;
     max-width: 100%;
-    min-width: 12.5em;  /* 200px */
+    min-width: 10em;  /* 200px */
     transition: opacity 0.2s;
 }
 
