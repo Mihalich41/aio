@@ -126,12 +126,11 @@ async function sendFormData(formData, title = '') {
 
         console.log('Отправляемые данные:', data); // Для отладки
 
-        const response = await fetch('https://kvazigame.ru/api', {
+        const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Origin': window.location.origin
+                'Accept': 'application/json'
             },
             body: JSON.stringify(data)
         });
@@ -143,9 +142,6 @@ async function sendFormData(formData, title = '') {
             console.error('Ответ сервера:', errorText); // Для отладки
             throw new Error(`Ошибка сервера: ${response.status}`);
         }
-
-        const result = await response.json();
-        console.log('Успешный ответ:', result); // Для отладки
 
         submitButton.textContent = 'Отправлено!';
         
@@ -171,7 +167,7 @@ async function sendFormData(formData, title = '') {
         setTimeout(() => {
             errorMessage.remove();
             submitButton.textContent = 'Отправить';
-            submitButton.disabled = false; // Разблокируем кнопку
+            submitButton.disabled = false;
         }, 3000);
         
         return false;
