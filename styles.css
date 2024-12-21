@@ -42,17 +42,15 @@ h1 {
 h2 {
     font-size: 1.4em;  /* 18px */
     margin-bottom: 0.938em;
-    color: var(--tg-theme-text-color, #000);
+    color: var(--tg-theme-link-color, #2481cc);
+    font-weight: bold;
 }
 
 h2.hint {
     color: var(--tg-theme-hint-color, #999);
 }
 
-h2.price {
-    color: var(--tg-theme-link-color, #2481cc);
-    font-weight: bold;
-}
+h2.price { font-weight: bold;}
 
 h3 {
     font-size: 1.4em;  /* 20px */
@@ -61,7 +59,7 @@ h3 {
 }
 
 p {
-    font-size: 1.3em;
+    font-size: 1.2em;
     line-height: 1.5;
     color: var(--tg-theme-text-color, #000);
 }
@@ -72,7 +70,7 @@ button {
     border: none;
     margin: 0 auto;
     border-radius: 1em;
-    padding: 0.3em 0.3em;
+    padding: 0.3em 1.2em;
     font-size: 1.3em;
     font-weight: bold;
     cursor: pointer;
@@ -166,7 +164,6 @@ p.emoji {
     align-items: center;
     gap: 0;
     text-align: left;
-    color: var(--tg-theme-link-color, #2481cc);
 }
 
 p.emoji .emoji {
