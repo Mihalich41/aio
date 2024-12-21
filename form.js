@@ -26,23 +26,23 @@ async function createPanels(data, container) {
         const newDiv = document.createElement('div');
         newDiv.classList.add('panel');
         newDiv.id = item.id;
-
         newDiv.innerHTML = `
         <h1>${item.h1}</h1>
         <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
-        ${item.p && Array.isArray(item.p.texts) ? item.p.texts.map(text => {
+        ${item.p && item.p.texts && Array.isArray(item.p.texts) ? item.p.texts.map(text => {
             return `
                 <p class="${item.p.class}">
                     <span class="emoji">${item.p.emoji}</span>
                     ${text.replace(/\n/g, '<br>')}
                 </p>
             `;
-        }).join('') : '<p>Нет текста</p>'}
+        }).join('') : '<p>Нет текста для отображения</p>'}
         ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
         ${item.buttons ? item.buttons.map(btn => `
             <p><button class="${btn.class}">${btn.text}</button></p>
         `).join('') : ''}
     `;
+    
     
     
     
