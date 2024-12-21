@@ -32,7 +32,11 @@ async function createPanels(data, container) {
             <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
             ${item.p ? item.p.map(p => {
                 if (typeof p === 'object') {
-                    return `<p class="${p.class}">${p.text}</p>`;
+                    return `
+                    <p class="${p.class}">
+                        <span class="emoji">${p.emoji}</span> 
+                        ${p.texts.join('<br>')}
+                    </p>`;
                 }
                 return `<p>${p}</p>`;
             }).join('') : ''}
@@ -72,6 +76,7 @@ async function loadData(jsonFile) {
 
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
+        alert('Произошла ошибка при загрузке данных. Попробуйте позже.');
     }
 }
 
@@ -94,7 +99,7 @@ function showCustomForm(title) {
     `;
     document.body.appendChild(formDiv);
 
-    const userData = tg.initDataUnsafe;
+    const userData = window.Telegram.WebApp.initDataUnsafe;
     if (userData && userData.user) {
         const username = userData.user.username;
         if (username) document.getElementById('username').value = '@' + username;
@@ -108,7 +113,7 @@ function showCustomForm(title) {
 }
 
 // Функция для отправки данных формы
-function sendFormData(formData, title = '') {
+async function sendFormData(formData, title = '') {
     const submitButton = document.querySelector('button[type="submit"]');
     if (submitButton.disabled) return false;
     
@@ -125,43 +130,33 @@ function sendFormData(formData, title = '') {
 
     console.log('Отправляемые данные:', data); // Для отладки
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://functions.yandexcloud.net/d4eno726s7f0too863f7', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    try {
+        const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
 
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            console.log('Успешный ответ:', xhr.responseText);
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Успешный ответ:', result);
             submitButton.textContent = 'Отправлено!';
-            
+
             setTimeout(() => {
                 const formPanel = document.querySelector('.form-panel');
                 if (formPanel) formPanel.remove();
                 backToMain();
             }, 2000);
         } else {
-            console.error('Ответ сервера:', xhr.status, xhr.responseText);
-            submitButton.disabled = false;
-            submitButton.textContent = 'Ошибка! Попробуйте позже';
-            
-            const errorMessage = document.createElement('div');
-            errorMessage.classList.add('error');
-            errorMessage.textContent = 'Произошла ошибка при отправке. Пожалуйста, попробуйте позже.';
-            submitButton.parentNode.insertBefore(errorMessage, submitButton.nextSibling);
-            
-            setTimeout(() => {
-                errorMessage.remove();
-                submitButton.textContent = 'Отправить';
-                submitButton.disabled = false;
-            }, 3000);
+            throw new Error(`Ошибка: ${response.status}`);
         }
-    };
-
-    xhr.onerror = function() {
-        console.error('Ошибка сети');
+    } catch (error) {
+        console.error('Ошибка отправки:', error);
         submitButton.disabled = false;
         submitButton.textContent = 'Ошибка! Попробуйте позже';
-        
+
         const errorMessage = document.createElement('div');
         errorMessage.classList.add('error');
         errorMessage.textContent = 'Произошла ошибка при отправке. Пожалуйста, попробуйте позже.';
@@ -172,16 +167,6 @@ function sendFormData(formData, title = '') {
             submitButton.textContent = 'Отправить';
             submitButton.disabled = false;
         }, 3000);
-    };
-
-    try {
-        xhr.send(JSON.stringify(data));
-        return true;
-    } catch (error) {
-        console.error('Ошибка:', error);
-        submitButton.disabled = false;
-        submitButton.textContent = 'Ошибка! Попробуйте позже';
-        return false;
     }
 }
 
@@ -238,4 +223,4 @@ window.sendFormData = sendFormData;
 window.addStep = addStep;
 window.initAllHandlers = initAllHandlers;
 window.backToMain = backToMain;
-window.loadData = loadData; 
+window.loadData = loadData;
