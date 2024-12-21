@@ -100,67 +100,68 @@ function showCustomForm(title) {
         if (username) document.getElementById('username').value = '@' + username;
     }
 
-    document.getElementById('telegramForm').onsubmit = async function(event) {
+    document.getElementById('telegramForm').onsubmit = function(event) {
         event.preventDefault();
         const formData = new FormData(this);
-        await sendFormData(formData, title);
+        sendFormData(formData, title);
     };
 }
 
 // Функция для отправки данных формы
-async function sendFormData(formData, title = '') {
+function sendFormData(formData, title = '') {
     const submitButton = document.querySelector('button[type="submit"]');
     if (submitButton.disabled) return false;
     
     submitButton.disabled = true;
     submitButton.textContent = 'Отправка...';
 
-    try {
-        const data = {
-            username: formData.get('username') || '@' + (window.Telegram.WebApp.initDataUnsafe?.user?.username || 'Гость'),
-            message: formData.get('message'),
-            course: title,
-            steps: window.userSteps,
-            section: title || 'Форма обратной связи'
-        };
+    const data = {
+        username: formData.get('username') || '@' + (window.Telegram.WebApp.initDataUnsafe?.user?.username || 'Гость'),
+        message: formData.get('message'),
+        course: title,
+        steps: window.userSteps,
+        section: title || 'Форма обратной связи'
+    };
 
-        console.log('Отправляемые данные:', data); // Для отладки
+    console.log('Отправляемые данные:', data); // Для отладки
 
-        const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://functions.yandexcloud.net/d4eno726s7f0too863f7', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
 
-        console.log('Статус ответа:', response.status); // Для отладки
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Ответ сервера:', errorText); // Для отладки
-            throw new Error(`Ошибка сервера: ${response.status}`);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log('Успешный ответ:', xhr.responseText);
+            submitButton.textContent = 'Отправлено!';
+            
+            setTimeout(() => {
+                const formPanel = document.querySelector('.form-panel');
+                if (formPanel) formPanel.remove();
+                backToMain();
+            }, 2000);
+        } else {
+            console.error('Ответ сервера:', xhr.status, xhr.responseText);
+            submitButton.disabled = false;
+            submitButton.textContent = 'Ошибка! Попробуйте позже';
+            
+            const errorMessage = document.createElement('div');
+            errorMessage.classList.add('error');
+            errorMessage.textContent = 'Произошла ошибка при отправке. Пожалуйста, попробуйте позже.';
+            submitButton.parentNode.insertBefore(errorMessage, submitButton.nextSibling);
+            
+            setTimeout(() => {
+                errorMessage.remove();
+                submitButton.textContent = 'Отправить';
+                submitButton.disabled = false;
+            }, 3000);
         }
+    };
 
-        const result = await response.json();
-        console.log('Успешный ответ:', result); // Для отладки
-
-        submitButton.textContent = 'Отправлено!';
-        
-        setTimeout(() => {
-            const formPanel = document.querySelector('.form-panel');
-            if (formPanel) formPanel.remove();
-            backToMain();
-        }, 2000);
-        
-        return true;
-
-    } catch (error) {
-        console.error('Ошибка:', error);
+    xhr.onerror = function() {
+        console.error('Ошибка сети');
         submitButton.disabled = false;
         submitButton.textContent = 'Ошибка! Попробуйте позже';
         
-        // Показываем пользователю сообщение об ошибке
         const errorMessage = document.createElement('div');
         errorMessage.classList.add('error');
         errorMessage.textContent = 'Произошла ошибка при отправке. Пожалуйста, попробуйте позже.';
@@ -171,7 +172,15 @@ async function sendFormData(formData, title = '') {
             submitButton.textContent = 'Отправить';
             submitButton.disabled = false;
         }, 3000);
-        
+    };
+
+    try {
+        xhr.send(JSON.stringify(data));
+        return true;
+    } catch (error) {
+        console.error('Ошибка:', error);
+        submitButton.disabled = false;
+        submitButton.textContent = 'Ошибка! Попробуйте позже';
         return false;
     }
 }
