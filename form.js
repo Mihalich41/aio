@@ -130,7 +130,10 @@ async function sendFormData(formData, title = '') {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
             },
             body: JSON.stringify(data)
         });
@@ -142,6 +145,9 @@ async function sendFormData(formData, title = '') {
             console.error('Ответ сервера:', errorText); // Для отладки
             throw new Error(`Ошибка сервера: ${response.status}`);
         }
+
+        const result = await response.json();
+        console.log('Успешный ответ:', result); // Для отладки
 
         submitButton.textContent = 'Отправлено!';
         
