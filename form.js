@@ -31,10 +31,15 @@ async function createPanels(data, container) {
         <h1>${item.h1}</h1>
         <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
         ${item.p ? item.p.map(p => {
+            console.log(p); // Выводим объект для отладки
             if (typeof p === 'object') {
-                // Преобразуем массив texts, заменяя символы новой строки на <br>
-                const textWithBreaks = p.texts.map(text => text.replace(/\n/g, '<br>')).join('<br>');
-                return `<p class="${p.class}"><span class="emoji">${p.emoji}</span>${textWithBreaks}</p>`;
+                // Проверяем, что p.texts действительно массив
+                if (Array.isArray(p.texts)) {
+                    const textWithBreaks = p.texts.map(text => text.replace(/\n/g, '<br>')).join('<br>');
+                    return `<p class="${p.class}"><span class="emoji">${p.emoji}</span>${textWithBreaks}</p>`;
+                } else {
+                    return `<p class="${p.class}">${p.emoji} ${p.texts}</p>`;
+                }
             }
             return `<p>${p}</p>`;
         }).join('') : ''}
@@ -43,6 +48,7 @@ async function createPanels(data, container) {
             <p><button class="${btn.class}">${btn.text}</button></p>
         `).join('') : ''}
     `;
+    
     
     
     
