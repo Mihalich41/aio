@@ -30,24 +30,20 @@ async function createPanels(data, container) {
         newDiv.innerHTML = `
         <h1>${item.h1}</h1>
         <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
-        ${item.p ? item.p.map(p => {
-            console.log(p); // Выводим объект для отладки
-            if (typeof p === 'object') {
-                // Проверяем, что p.texts действительно массив
-                if (Array.isArray(p.texts)) {
-                    const textWithBreaks = p.texts.map(text => text.replace(/\n/g, '<br>')).join('<br>');
-                    return `<p class="${p.class}"><span class="emoji">${p.emoji}</span>${textWithBreaks}</p>`;
-                } else {
-                    return `<p class="${p.class}">${p.emoji} ${p.texts}</p>`;
-                }
-            }
-            return `<p>${p}</p>`;
+        ${item.p ? item.p.texts.map(text => {
+            return `
+                <p class="${item.p.class}">
+                    <span class="emoji">${item.p.emoji}</span>
+                    ${text.replace(/\n/g, '<br>')}
+                </p>
+            `;
         }).join('') : ''}
         ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
         ${item.buttons ? item.buttons.map(btn => `
             <p><button class="${btn.class}">${btn.text}</button></p>
         `).join('') : ''}
     `;
+    
     
     
     
