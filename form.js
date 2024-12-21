@@ -28,23 +28,20 @@ async function createPanels(data, container) {
         newDiv.id = item.id;
 
         newDiv.innerHTML = `
-            <h1>${item.h1}</h1>
-            <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
-            ${item.p ? item.p.map(p => {
-                if (typeof p === 'object') {
-                    return `
-                    <p class="${p.class}">
-                        <span class="emoji">${p.emoji}</span> 
-                        ${p.texts.join('<br>')}
-                    </p>`;
-                }
-                return `<p>${p}</p>`;
-            }).join('') : ''}
-            ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
-            ${item.buttons ? item.buttons.map(btn => `
-                <p><button class="${btn.class}">${btn.text}</button></p>
-            `).join('') : ''}
-        `;
+        <h1>${item.h1}</h1>
+        <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
+        ${item.p ? Array.isArray(item.p) ? item.p.map(p => {
+            if (typeof p === 'object') {
+                return `<p class="${p.class}">${p.texts}</p>`;
+            }
+            return `<p>${p}</p>`;
+        }).join('') : `<p>${item.p}</p>` : ''}
+        ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
+        ${item.buttons ? item.buttons.map(btn => `
+            <p><button class="${btn.class}">${btn.text}</button></p>
+        `).join('') : ''}
+    `;
+    
 
         container.appendChild(newDiv);
     });
