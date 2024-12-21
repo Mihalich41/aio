@@ -42,6 +42,7 @@ async function createPanels(data, container) {
         `).join('') : ''}
     `;
     
+    
 
         container.appendChild(newDiv);
     });
