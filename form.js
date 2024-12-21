@@ -19,34 +19,45 @@ function backToMain() {
     const backLink = document.querySelector('.back-link');
     if (backLink) backLink.style.display = 'none';
 }
-
-// Общая функция для создания панелей
 async function createPanels(data, container) {
     data.forEach(item => {
         const newDiv = document.createElement('div');
         newDiv.classList.add('panel');
         newDiv.id = item.id;
 
-        newDiv.innerHTML = `
-        <h1>${item.h1}</h1>
-        <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
-        ${
-            item.p && item.p.texts && Array.isArray(item.p.texts) ?
-            // Добавляем эмодзи только один раз перед текстом
-            `
-            <p class="${item.p.class}">
-                <span class="emoji">${item.p.emoji}</span>
-                ${item.p.texts.join('<br>')}
-            </p>
-            ` : ''
-        }
-        ${item.h3 ? item.h3.map(text => `<h3>${text}</h3>`).join('') : ''}
-        ${item.buttons ? item.buttons.map(btn => `
-            <p><button class="${btn.class}">${btn.text}</button></p>
-        `).join('') : ''}
-    `;
-    
+        // Создаем HTML для панели
+        let panelHTML = `
+            <h1>${item.h1}</h1>
+            <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
+        `;
 
+        // Проверяем, если есть эмодзи
+        if (item.p && item.p.texts && Array.isArray(item.p.texts)) {
+            const texts = item.p.texts;
+            const emoji = item.p.emoji ? `<span class="emoji">${item.p.emoji}</span>` : ''; // Получаем эмодзи, если оно есть
+            
+            // Добавляем эмодзи только перед первым элементом текста
+            panelHTML += `
+                <p class="${item.p.class}">
+                    ${emoji} ${texts.join('<br>')}
+                </p>
+            `;
+        }
+
+        // Добавляем h3 элементы
+        if (item.h3) {
+            panelHTML += item.h3.map(text => `<h3>${text}</h3>`).join('');
+        }
+
+        // Добавляем кнопки
+        if (item.buttons) {
+            panelHTML += item.buttons.map(btn => `
+                <p><button class="${btn.class}">${btn.text}</button></p>
+            `).join('');
+        }
+
+        // Вставляем панель в контейнер
+        newDiv.innerHTML = panelHTML;
         container.appendChild(newDiv);
     });
 }
