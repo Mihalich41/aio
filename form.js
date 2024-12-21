@@ -129,11 +129,7 @@ async function sendFormData(formData, title = '') {
         const response = await fetch('https://functions.yandexcloud.net/d4eno726s7f0too863f7', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         });
