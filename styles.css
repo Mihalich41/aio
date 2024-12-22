@@ -65,20 +65,23 @@ p {
 }
 
 button {
-    background-color: var(--tg-theme-button-color, #2481cc);
-    color: var(--tg-theme-button-text-color, #ffffff);
+    background-color: var(--tg-theme-button-color, #2481cc); /* Цвет фона */
+    color: var(--tg-theme-button-text-color, #ffffff); /* Цвет текста */
     border: none;
     margin: 0 auto;
     border-radius: 1em;
     padding: 0.5em 1em;
-    font-size: 1.3em;
+    font-size: 1.2em;
     font-weight: bold;
     cursor: pointer;
     max-width: 100%;
     min-width: 10em;  /* 200px */
     transition: opacity 0.2s;
-}
 
+    /* Обводка текста с использованием text-shadow */
+    text-shadow: 1px 1px 0px var(--tg-theme-button-color, #2481cc), -1px -1px 0px var(--tg-theme-button-color, #2481cc),
+                 1px -1px 0px var(--tg-theme-button-color, #2481cc), -1px 1px 0px var(--tg-theme-button-color, #2481cc);
+}
 button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
