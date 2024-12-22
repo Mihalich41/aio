@@ -48,7 +48,9 @@ async function createPanels(data, container) {
                 </div>
             `;
         }
-        <h3>${item.h3}</h3>
+        if (item.span && item.span.emoji && item.span.texts) {
+            panelHTML += `<h3>${item.h3}</h3>`
+        }
         // Добавление кнопок
         if (item.buttons) {
             panelHTML += item.buttons.map(btn => `
