@@ -35,7 +35,7 @@ async function createPanels(data, container) {
                 <p class="emoji"><span class="emoji">${item.span.emoji}</span> ${item.span.texts.join('<br>')}</p>`;
         }
         
-        if (item.p) {
+        if (item.span && item.span.emoji && item.span.texts) {
             panelHTML += `
                 <div class="p-text">
                     ${item.p.map(text => {
