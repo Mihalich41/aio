@@ -23,8 +23,9 @@ async function createPanels(data, container) {
     data.forEach(item => {
         const newDiv = document.createElement('div');
         newDiv.classList.add('panel');
-        newDiv.id = item.id;
-        newDiv.innerHTML = `
+        newDiv.id = item.id;  
+
+        let panelHTML = `
             <h1>${item.h1}</h1>
             <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
             <p class="emoji"><span class="emoji">${item.span.emoji}</span> ${item.span.texts.join('<br>')}</p>`;
