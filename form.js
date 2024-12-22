@@ -25,31 +25,30 @@ async function createPanels(data, container) {
         newDiv.classList.add('panel');
         newDiv.id = item.id;
 
-        // Создаем HTML для панели
+        // Создание HTML для панели
         let panelHTML = `
             <h1>${item.h1}</h1>
             <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>
         `;
 
-        // Проверяем, если есть эмодзи
-        if (item.p && item.p.texts && Array.isArray(item.p.texts)) {
-            const texts = item.p.texts;
-            const emoji = item.p.emoji ? `<span class="emoji">${item.p.emoji}</span>` : ''; // Получаем эмодзи, если оно есть
-            
-            // Добавляем эмодзи только перед первым элементом текста
+        // Обработка текста в p, в том числе с классами hint и emoji
+        if (item.p) {
             panelHTML += `
-                <p class="${item.p.class}">
-                    ${emoji} ${texts.join('<br>')}
-                </p>
+                <div class="p-text">
+                    ${item.p.map(text => {
+                        if (typeof text === "string") {
+                            return `<p>${text}</p>`;
+                        } else if (text.class === "hint") {
+                            return `<p class="hint">${text.text}</p>`;
+                        } else if (text.class === "emoji") {
+                            return `<p class="emoji"><span class="emoji">${text.emoji}</span> ${text.text}</p>`;
+                        }
+                    }).join('')}
+                </div>
             `;
         }
 
-        // Добавляем h3 элементы
-        if (item.h3) {
-            panelHTML += item.h3.map(text => `<h3>${text}</h3>`).join('');
-        }
-
-        // Добавляем кнопки
+        // Добавление кнопок
         if (item.buttons) {
             panelHTML += item.buttons.map(btn => `
                 <p><button class="${btn.class}">${btn.text}</button></p>
