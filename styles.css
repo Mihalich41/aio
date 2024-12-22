@@ -79,9 +79,13 @@ button {
     transition: opacity 0.2s;
 
     /* Обводка текста с использованием text-shadow */
-    text-shadow: 1px 1px 0px var(--tg-theme-bg-color, #fff), -1px -1px 0px var(--tg-theme-bg-color, #fff),
-                 1px -1px 0px var(--tg-theme-bg-color, #fff), -1px 1px 0px var(--tg-theme-bg-color, #fff);
+    text-shadow: 1px 1px 1px rgba(var(--tg-theme-bg-color-rgb), 0.5), 
+    -1px -1px 1px rgba(var(--tg-theme-bg-color-rgb), 0.5),
+    1px -1px 1px rgba(var(--tg-theme-bg-color-rgb), 0.5), 
+    -1px 1px 1px rgba(var(--tg-theme-bg-color-rgb), 0.5);
 }
+
+
 button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
