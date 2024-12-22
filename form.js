@@ -48,7 +48,7 @@ async function createPanels(data, container) {
                 </div>
             `;
         }
-
+        <h3>${item.h3}</h3>
         // Добавление кнопок
         if (item.buttons) {
             panelHTML += item.buttons.map(btn => `
