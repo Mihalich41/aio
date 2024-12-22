@@ -30,12 +30,12 @@ async function createPanels(data, container) {
             <h2 ${item.h2class ? `class="${item.h2class}"` : ''}>${item.h2}</h2>`
 
         // Обработка текста в p, в том числе с классами hint и emoji
-        if (item.span) {
+        if (item.span && item.span.emoji && item.span.texts) {
             panelHTML += `
                 <p class="emoji"><span class="emoji">${item.span.emoji}</span> ${item.span.texts.join('<br>')}</p>`;
         }
         
-        if (item.span && item.span.emoji && item.span.texts) {
+        if (item.p) {
             panelHTML += `
                 <div class="p-text">
                     ${item.p.map(text => {
