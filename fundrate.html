@@ -72,7 +72,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Скрыть кнопки во время загрузки */
+        /* Скрыть кнопки и блоки во время загрузки */
         .hidden {
             display: none;
         }
@@ -80,7 +80,7 @@
         /* Плавное появление кнопок */
         .fade-in {
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            transition: opacity 1.5s ease-in-out;
         }
         .fade-in.visible {
             opacity: 1;
@@ -89,12 +89,19 @@
         /* Плавное появление и исчезновение блока с сигналами */
         .fade-container {
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            transition: opacity 1.5s ease-in-out;
             visibility: hidden;
         }
         .fade-container.visible {
             opacity: 1;
             visibility: visible;
+        }
+
+        /* Плавное скрытие блока сигналов перед загрузкой */
+        .fade-out {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.5s ease-in-out, visibility 0s 1.5s;
         }
 
         /* Стили для блоков с сигналами и кнопками */
@@ -204,14 +211,16 @@
                 container.appendChild(signalElement);
             });
 
-            // Плавно возвращаем кнопки
-            const buttonsContainer = document.getElementById('buttons-container');
-            buttonsContainer.classList.add('visible'); // Кнопки становятся видимыми после загрузки
-            document.getElementById('loading-container').classList.add('hidden');
-            enableButtons();  // Включаем кнопки после загрузки сигналов
-
             // Плавно отображаем контейнер с сигналами
             container.classList.add('visible');
+
+            // Плавно показываем кнопки после загрузки
+            const buttonsContainer = document.getElementById('buttons-container');
+            buttonsContainer.classList.add('visible');
+            document.getElementById('loading-container').classList.add('hidden');
+
+            // Включаем кнопки
+            enableButtons();
         }
 
         // Включаем кнопки после получения сигналов
@@ -227,11 +236,15 @@
             const buttonsContainer = document.getElementById('buttons-container');
             const signalsContainer = document.getElementById('signals-container');
 
-            // Отключаем кнопки и показываем индикатор загрузки
-            buttons.forEach(button => button.disabled = true);
-            buttonsContainer.classList.remove('visible'); // Скрываем кнопки
-            signalsContainer.classList.remove('visible'); // Скрываем блок с сигналами
-            loadingContainer.classList.remove('hidden');
+            // Отключаем кнопки и скрываем блок сигналов с анимацией
+            signalsContainer.classList.add('fade-out'); // Скрываем блок сигналов
+
+            // После того как блок сигналов исчезнет, показываем загрузку
+            setTimeout(() => {
+                loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
+                buttonsContainer.classList.remove('visible'); // Скрываем кнопки
+                buttons.forEach(button => button.disabled = true); // Отключаем кнопки
+            }, 1500); // Таймаут для скрытия блока сигналов (1.5 секунды)
 
             // Загружаем данные и отображаем их
             await fetchSignals(category);
