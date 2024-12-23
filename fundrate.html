@@ -43,7 +43,6 @@
             background-color: #ddd;
             cursor: not-allowed;
         }
-
     </style>
 </head>
 <body>
@@ -59,12 +58,20 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Это расширяет приложение для полноэкранного режима
+
+        // Подключаем обработчик событий для "ready"
+        tg.ready();
+
+        tg.onEvent('ready', () => {
+            // После того как WebApp инициализировался, получаем имя пользователя
+            setUsername();
+
+            // Расширяем приложение на весь экран
+            tg.expand();
+        });
 
         // Функция для получения имени пользователя из Telegram
         function setUsername() {
-            const tg = window.Telegram.WebApp;
-
             // Проверяем, доступен ли Telegram WebApp (работает ли в Telegram)
             if (tg && tg.user) {
                 const username = tg.user.first_name || "Неизвестный пользователь"; // Если имя отсутствует, используем "Неизвестный пользователь"
@@ -149,10 +156,6 @@
             fetchSignals();
         }
 
-        // Запускаем функцию получения данных при загрузке страницы
-        window.onload = function() {
-            setUsername(); // Устанавливаем имя пользователя
-        }
     </script>
 
 </body>
