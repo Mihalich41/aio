@@ -242,7 +242,7 @@
 
             // После того как блок сигналов исчезнет, показываем загрузку
 
-                loadingContainer.classList.add('visible'); // Показываем индикатор загрузки
+                loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
                 buttonsContainer.classList.remove('visible'); // Скрываем кнопки
                 buttons.forEach(button => button.disabled = true); // Отключаем кнопки
                 signalsContainer.classList.remove('visible');
