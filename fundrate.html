@@ -123,7 +123,7 @@
     <div id="signals-container" class="fade-container"></div>
 
     <!-- Блок с индикатором загрузки -->
-    <div id="loading-container" class="hidden">
+    <div id="loading-container" class="fade-out hidden">
         <div class="loading">
             Загрузка сигналов...
             <div class="spinner"></div>
@@ -265,11 +265,9 @@
             const tg = window.Telegram.WebApp;
             tg.expand();  // Расширяем окно при открытии
 
-            // После 1 секунды запускаем анимацию появления кнопок
-            setTimeout(() => {
-                const buttonsContainer = document.getElementById('buttons-container');
-                buttonsContainer.classList.add('visible');
-            }, 1000);
+        const buttonsContainer = document.getElementById('buttons-container');
+        buttonsContainer.classList.add('visible');
+         
         }
     </script>
 
