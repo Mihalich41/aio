@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
     <title>Финансовые сигналы</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 10px;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            color: #333;
-        }
+
         .signal {
             background-color: #fff;
             border: 1px solid #ccc;
@@ -47,13 +41,25 @@
 </head>
 <body>
 
-<h1>Сигналы по фондовым ставкам</h1>
+    <h1 id="user-name">Загрузка...</h1> <!-- Место для отображения имени пользователя -->
 
-<div id="signals-container">
-    <!-- Здесь будут отображаться сигналы -->
-</div>
-
-<script>
+    <div id="signals-container">
+        <!-- Здесь будут отображаться сигналы -->
+    </div>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        // Функция для получения имени пользователя из Telegram
+        function setUsername() {
+            const tg = window.Telegram.WebApp;
+    
+            // Получаем имя пользователя
+            const username = tg.user.first_name || "Пользователь"; // Если имя отсутствует, используем "Пользователь"
+            
+            // Обновляем заголовок <h1>
+            const userNameElement = document.getElementById('user-name');
+            userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
+        }
     // Функция для получения сигналов с API
     async function fetchSignals() {
         try {
@@ -84,13 +90,13 @@
             signalTitle.classList.add('title');
             signalTitle.textContent = `${signal.symbol}`;
 
-            const fundingRateElement = document.createElement('div');
-            fundingRateElement.classList.add('funding-rate');
-            fundingRateElement.textContent = `Фондовый рейд: ${signal.fundingRate.toFixed(4)}`;
-
             const priceElement = document.createElement('div');
             priceElement.classList.add('price');
             priceElement.textContent = `Цена: $${signal.price.toFixed(2)}`;
+
+            const fundingRateElement = document.createElement('div');
+            fundingRateElement.classList.add('funding-rate');
+            fundingRateElement.textContent = `Фондовый рейд: ${signal.fundingRate.toFixed(4)}`;
 
             // Определяем текст совета в зависимости от фондового рейта
             const adviceElement = document.createElement('div');
@@ -106,8 +112,8 @@
 
             // Добавляем все элементы в блок
             signalElement.appendChild(signalTitle);
-            signalElement.appendChild(fundingRateElement);
-            signalElement.appendChild(priceElement);
+            signalElement.appendChild(priceElement);  // Сначала цена
+            signalElement.appendChild(fundingRateElement);  // Потом фондовый рейд
             signalElement.appendChild(adviceElement);
 
             container.appendChild(signalElement);
