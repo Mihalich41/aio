@@ -104,40 +104,45 @@ function displaySignals(signals) {
     if (signals.length > 0) {
         const signal = signals[0];  // Мы получаем только одну монету с максимальным фондовым рейтом
 
-        const signalElement = document.createElement('div');
-        signalElement.classList.add('signal');
+        // Проверяем, что данные доступны перед использованием toFixed()
+        if (signal && signal.fundingRate !== undefined && signal.price !== undefined) {
+            const signalElement = document.createElement('div');
+            signalElement.classList.add('signal');
 
-        const signalTitle = document.createElement('div');
-        signalTitle.classList.add('title');
-        signalTitle.textContent = `${signal.symbol}`;
+            const signalTitle = document.createElement('div');
+            signalTitle.classList.add('title');
+            signalTitle.textContent = `${signal.symbol}`;
 
-        const priceElement = document.createElement('div');
-        priceElement.classList.add('price');
-        priceElement.textContent = `Цена: $${signal.price.toFixed(2)}`;
+            const priceElement = document.createElement('div');
+            priceElement.classList.add('price');
+            priceElement.textContent = `Цена: $${signal.price.toFixed(2)}`;
 
-        const fundingRateElement = document.createElement('div');
-        fundingRateElement.classList.add('funding-rate');
-        fundingRateElement.textContent = `Фондовый рейд: ${signal.fundingRate.toFixed(4)}`;
+            const fundingRateElement = document.createElement('div');
+            fundingRateElement.classList.add('funding-rate');
+            fundingRateElement.textContent = `Фондовый рейд: ${signal.fundingRate.toFixed(4)}`;
 
-        // Определяем текст совета в зависимости от фондового рейта
-        const adviceElement = document.createElement('div');
-        adviceElement.classList.add('advice');
+            // Определяем текст совета в зависимости от фондового рейта
+            const adviceElement = document.createElement('div');
+            adviceElement.classList.add('advice');
 
-        if (signal.fundingRate > 0) {
-            adviceElement.textContent = "Рейт положительный, ставим шорт";
-            adviceElement.classList.add('short-advice');
+            if (signal.fundingRate > 0) {
+                adviceElement.textContent = "Рейт положительный, ставим шорт";
+                adviceElement.classList.add('short-advice');
+            } else {
+                adviceElement.textContent = "Рейт отрицательный, ставим лонг";
+                adviceElement.classList.add('long-advice');
+            }
+
+            // Добавляем все элементы в блок
+            signalElement.appendChild(signalTitle);
+            signalElement.appendChild(priceElement);  // Сначала цена
+            signalElement.appendChild(fundingRateElement);  // Потом фондовый рейд
+            signalElement.appendChild(adviceElement);
+
+            container.appendChild(signalElement);
         } else {
-            adviceElement.textContent = "Рейт отрицательный, ставим лонг";
-            adviceElement.classList.add('long-advice');
+            container.innerHTML = '<p>Некорректные данные получены</p>';
         }
-
-        // Добавляем все элементы в блок
-        signalElement.appendChild(signalTitle);
-        signalElement.appendChild(priceElement);  // Сначала цена
-        signalElement.appendChild(fundingRateElement);  // Потом фондовый рейд
-        signalElement.appendChild(adviceElement);
-
-        container.appendChild(signalElement);
     } else {
         container.innerHTML = '<p>Нет данных для отображения</p>';
     }
