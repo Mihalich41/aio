@@ -241,12 +241,12 @@
           //  signalsContainer.classList.add('fade-out'); 
 
             // После того как блок сигналов исчезнет, показываем загрузку
-            setTimeout(() => {
-                loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
+
+                loadingContainer.classList.add('visible'); // Показываем индикатор загрузки
                 buttonsContainer.classList.remove('visible'); // Скрываем кнопки
                 buttons.forEach(button => button.disabled = true); // Отключаем кнопки
                 signalsContainer.classList.remove('visible');
-            }, 1500);
+
               
             // Загружаем данные и отображаем их
             await fetchSignals(category);
