@@ -89,8 +89,8 @@
         /* Плавное появление и исчезновение блока с сигналами */
         .fade-container {
             opacity: 0;
-            transition: opacity 1.5s ease-in-out;
             visibility: hidden;
+            transition: opacity 1.5s ease-in-out, visibility 0s 1.5s;
         }
         .fade-container.visible {
             opacity: 1;
@@ -236,7 +236,7 @@
             const buttonsContainer = document.getElementById('buttons-container');
             const signalsContainer = document.getElementById('signals-container');
 
-            // Отключаем кнопки и скрываем блок сигналов с анимацией
+            // Скрываем блок сигналов с анимацией
             signalsContainer.classList.add('fade-out'); // Скрываем блок сигналов
 
             // После того как блок сигналов исчезнет, показываем загрузку
