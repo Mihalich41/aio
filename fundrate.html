@@ -8,7 +8,6 @@
     <title>Финансовые сигналы</title>
     <style>
         .signal {
-            background-color: #fff;
             border: 1px solid #ccc;
             padding: 15px;
             margin-bottom: 20px;
@@ -37,12 +36,6 @@
             color: green;
         }
         #get-signals-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
             margin: 20px 0;
         }
@@ -65,6 +58,8 @@
     </div>
 
     <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
         // Функция для получения имени пользователя из Telegram
         function setUsername() {
             const tg = window.Telegram.WebApp;
