@@ -230,4 +230,15 @@
         window.onload = function() {
             setUsername(); // Устанавливаем имя пользователя
             const tg = window.Telegram.WebApp;
-            tg.expand();  // Рас
+            tg.expand();  // Расширяем окно при открытии
+
+            // После 1 секунды запускаем анимацию появления кнопок
+            setTimeout(() => {
+                const buttonsContainer = document.getElementById('buttons-container');
+                buttonsContainer.classList.add('visible');
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
