@@ -139,13 +139,17 @@
         }
 
         // Функция для получения сигналов по категории
-        function getSignalsByCategory(category) {
+        async function getSignalsByCategory(category) {
             const buttons = document.querySelectorAll('.category-btn');
+
+            // Отключаем все кнопки после начала запроса
             buttons.forEach(button => button.disabled = true);
 
-            fetchSignals(category).finally(() => {
-                buttons.forEach(button => button.disabled = false);
-            });
+            // Загружаем данные и отображаем их
+            await fetchSignals(category);
+
+            // Включаем кнопки обратно после загрузки данных
+            buttons.forEach(button => button.disabled = false);
         }
 
         // Слушатели событий для кнопок
