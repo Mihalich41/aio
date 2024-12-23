@@ -7,12 +7,17 @@
     <link rel="stylesheet" href="styles.css">
     <title>Финансовые сигналы</title>
     <style>
+        :root {
+            --tg-theme-secondary-bg-color: #f1f1f1; /* Установите значение по умолчанию для переменной */
+        }
+
         .signal {
             border: 1px solid #ccc;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: var(--tg-theme-secondary-bg-color); /* Фон сигнала */
         }
         .signal .title {
             font-size: 20px;
@@ -237,17 +242,17 @@
             const signalsContainer = document.getElementById('signals-container');
 
             // Скрываем блок сигналов с анимацией
-            signalsContainer.classList.add('fade-out'); // Скрываем блок сигналов
+            signalsContainer.classList.add('fade-out'); // Скрываем сигнал
+            loadingContainer.classList.remove('hidden');
+            loadingContainer.classList.add('fade-container');
 
-            // После того как блок сигналов исчезнет, показываем загрузку
-            setTimeout(() => {
-                loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
-                buttonsContainer.classList.remove('visible'); // Скрываем кнопки
-                buttons.forEach(button => button.disabled = true); // Отключаем кнопки
-            }, 1500); // Таймаут для скрытия блока сигналов (1.5 секунды)
+            // Отключаем кнопки
+            buttons.forEach(button => button.disabled = true);
 
-            // Загружаем данные и отображаем их
-            await fetchSignals(category);
+            // Таймаут для скрытия блока сигналов и загрузки новых данных (1.5 секунды)
+            setTimeout(async () => {
+                await fetchSignals(category); // Загружаем данные
+            }, 1500);
         }
 
         // Слушатели событий для кнопок
