@@ -77,6 +77,15 @@
             display: none;
         }
 
+        /* Плавное появление кнопок */
+        .fade-in {
+            opacity: 0;
+            transition: opacity 3s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+        }
+
         /* Стили для блоков с сигналами и кнопками */
         #signals-container {
             margin-top: 20px;
@@ -104,7 +113,7 @@
     </div>
 
     <!-- Кнопки выбора категории -->
-    <div id="buttons-container">
+    <div id="buttons-container" class="fade-in">
         <button class="category-btn" id="largeCapBtn">Топ 10 монет</button>
         <button class="category-btn" id="midCapBtn">Средняя капитализация</button>
         <button class="category-btn" id="smallCapBtn">Монеты с 30 по 99</button>
@@ -184,17 +193,10 @@
                 container.appendChild(signalElement);
             });
 
-            // Возвращаем кнопки обратно на место и скрываем индикатор загрузки
+            // Плавно возвращаем кнопки
+            const buttonsContainer = document.getElementById('buttons-container');
+            buttonsContainer.classList.add('visible'); // Кнопки становятся видимыми после загрузки
             document.getElementById('loading-container').classList.add('hidden');
-            document.getElementById('buttons-container').classList.remove('hidden');
-
-            // Анимация для восстановления кнопок
-            const buttons = document.querySelectorAll('.category-btn');
-            buttons.forEach(button => {
-                button.disabled = false;
-                button.style.transition = 'background-color 3s ease'; // Включаем анимацию
-                button.style.backgroundColor = '#4CAF50'; // Восстанавливаем цвет кнопок
-            });
         }
 
         // Функция для получения сигналов по категории
@@ -205,7 +207,7 @@
 
             // Отключаем кнопки и показываем индикатор загрузки
             buttons.forEach(button => button.disabled = true);
-            buttonsContainer.classList.add('hidden');
+            buttonsContainer.classList.remove('visible'); // Скрываем кнопки
             loadingContainer.classList.remove('hidden');
 
             // Загружаем данные и отображаем их
