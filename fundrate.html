@@ -44,6 +44,7 @@
             border-radius: 5px;
             cursor: pointer;
             margin: 20px 10px;
+            transition: background-color 3s ease;
         }
         #get-signals-btn:disabled, .category-btn:disabled {
             background-color: #ddd;
@@ -186,6 +187,14 @@
             // Возвращаем кнопки обратно на место и скрываем индикатор загрузки
             document.getElementById('loading-container').classList.add('hidden');
             document.getElementById('buttons-container').classList.remove('hidden');
+
+            // Анимация для восстановления кнопок
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(button => {
+                button.disabled = false;
+                button.style.transition = 'background-color 3s ease'; // Включаем анимацию
+                button.style.backgroundColor = '#4CAF50'; // Восстанавливаем цвет кнопок
+            });
         }
 
         // Функция для получения сигналов по категории
