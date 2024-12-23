@@ -1,52 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funding Rate Signals</title>
+    <title>Финансовые сигналы</title>
     <style>
-        .long { color: green; }
-        .short { color: red; }
-        .large { font-weight: bold; color: blue; }
-        .medium { font-weight: bold; color: orange; }
-        .small { font-weight: bold; color: gray; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        .signal {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .signal .title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .signal .funding-rate {
+            font-size: 18px;
+            color: #ff6b6b;
+        }
+        .signal .price {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .long {
+            color: green;
+        }
+        .short {
+            color: red;
+        }
     </style>
 </head>
 <body>
-    <h1>Funding Rate Signals</h1>
-    <div id="signals"></div>
 
-    <script>
-        async function fetchSignals() {
-            try {
-                // URL вашей Яндекс Функции для получения данных
-                const response = await fetch('https://functions.yandexcloud.net/d4eqm47pjutco6k0d404');
-                const data = await response.json();
+<h1>Сигналы по фондовым ставкам</h1>
 
-                const signalsContainer = document.getElementById('signals');
-                signalsContainer.innerHTML = ''; // Очищаем предыдущие данные
+<div id="signals-container">
+    <!-- Здесь будут отображаться сигналы -->
+</div>
 
-                // Обработка данных и отображение
-                data.pairs.forEach(pair => {
-                    const signalElement = document.createElement('div');
-                    signalElement.classList.add(pair.signal); // Добавляем класс для правильного отображения цвета
+<script>
+    // Функция для получения сигналов с API
+    async function fetchSignals() {
+        try {
+            const response = await fetch('https://functions.yandexcloud.net/d4eqm47pjutco6k0d404'); // Замените на ваш URL
+            const data = await response.json();
 
-                    signalElement.innerHTML = `
-                        <strong>${pair.symbol}</strong><br>
-                        Цена: $${pair.price}<br>
-                        Funding Rate: ${pair.fundingRate * 100}%<br>
-                        <span class="${pair.capitalization}">До ${pair.capitalization === 'large' ? '50%' : pair.capitalization === 'medium' ? '30%' : '20%'} депозита - ставка</span>
-                    `;
-                    signalsContainer.appendChild(signalElement);
-                });
-            } catch (error) {
-                console.error('Ошибка при загрузке данных:', error);
-                document.getElementById('signals').innerHTML = 'Ошибка при загрузке данных.';
+            if (data && data.data) {
+                displaySignals(data.data);
+            } else {
+                alert('Нет данных для отображения');
             }
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+            alert('Ошибка при загрузке данных. Пожалуйста, попробуйте снова позже.');
         }
+    }
 
-        // Загружаем данные при загрузке страницы
-        fetchSignals();
-    </script>
+    // Функция для отображения сигналов
+    function displaySignals(signals) {
+        const container = document.getElementById('signals-container');
+        container.innerHTML = '';  // Очищаем контейнер перед выводом новых данных
+
+        signals.forEach(signal => {
+            const signalElement = document.createElement('div');
+            signalElement.classList.add('signal');
+
+            const signalTitle = document.createElement('div');
+            signalTitle.classList.add('title');
+            signalTitle.textContent = `${signal.symbol}`;
+
+            const fundingRateElement = document.createElement('div');
+            fundingRateElement.classList.add('funding-rate');
+            fundingRateElement.textContent = `Фондовый рейд: ${signal.fundingRate.toFixed(4)}`;
+
+            const priceElement = document.createElement('div');
+            priceElement.classList.add('price');
+            priceElement.textContent = `Цена: $${signal.price.toFixed(2)}`;
+
+            // Определяем, что это "Long" или "Short" на основе фонда
+            const signalType = signal.fundingRate > 0 ? 'long' : 'short';
+            signalElement.classList.add(signalType);
+
+            signalElement.appendChild(signalTitle);
+            signalElement.appendChild(fundingRateElement);
+            signalElement.appendChild(priceElement);
+
+            container.appendChild(signalElement);
+        });
+    }
+
+    // Запускаем функцию получения данных при загрузке страницы
+    fetchSignals();
+</script>
+
 </body>
 </html>
