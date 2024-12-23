@@ -1,5 +1,4 @@
-    
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +8,6 @@
     <title>Финансовые сигналы</title>
     <style>
         .signal {
-         
             border: 1px solid #ccc;
             padding: 15px;
             margin-bottom: 20px;
@@ -51,13 +49,12 @@
             background-color: #ddd;
             cursor: not-allowed;
         }
-
     </style>
 </head>
 <body>
 
-    <h1 id="user-name">...</h1> <!-- Место для отображения имени пользователя -->
-    <h1 id="user-name">Неизвестный пользователь</h1> <!-- Место для отображения имени пользователя -->
+    <!-- Место для отображения имени пользователя -->
+    <h1 id="user-name">Загрузка...</h1> 
 
     <!-- Кнопка для получения сигналов -->
     <button id="get-signals-btn" onclick="getSignals()">Получить сигналы</button>
@@ -72,26 +69,16 @@
             const tg = window.Telegram.WebApp;
 
             // Проверяем, доступен ли Telegram WebApp (работает ли в Telegram)
-            if (tg && tg.user) {
-    
-    
-    
-    
-    
-    
-                                const username = tg.user.first_name || "Неизвестный пользователь"; // Если имя отсутствует, используем "Неизвестный пользователь"
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const user = tg.initDataUnsafe.user;
+                const username = user.first_name || "Неизвестный пользователь"; // Если имя отсутствует, используем "Неизвестный пользователь"
 
-                // Обновляем заголовок <h1>
+                // Обновляем заголовок <h1> с именем пользователя
                 const userNameElement = document.getElementById('user-name');
                 userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
             } else {
-                            
-                                        
-                                                                
-                
                 // Если не в Telegram, отображаем "Неизвестный пользователь"
                 const userNameElement = document.getElementById('user-name');
-                
                 userNameElement.textContent = `Неизвестный пользователь, хочешь получить сигналы на основе fund rate?`;
             }
         }
