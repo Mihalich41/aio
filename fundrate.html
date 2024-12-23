@@ -43,11 +43,12 @@
             background-color: #ddd;
             cursor: not-allowed;
         }
+
     </style>
 </head>
 <body>
 
-    <h1 id="user-name">Неизвестный пользователь</h1> <!-- Место для отображения имени пользователя -->
+    <h1 id="user-name">Загрузка...</h1> <!-- Место для отображения имени пользователя -->
 
     <!-- Кнопка для получения сигналов -->
     <button id="get-signals-btn" onclick="getSignals()">Получить сигналы</button>
@@ -58,31 +59,18 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-
-        // Подключаем обработчик событий для "ready"
-        tg.ready();
-
-        tg.onEvent('ready', () => {
-            // После того как WebApp инициализировался, получаем имя пользователя
-            setUsername();
-
-            // Расширяем приложение на весь экран
-            tg.expand();
-        });
-
-        // Функция для получения имени пользователя из Telegram
+        
+        // Функция для получения имени пользователя или логина из Telegram
         function setUsername() {
-            // Проверяем, доступен ли Telegram WebApp (работает ли в Telegram)
-            if (tg && tg.user) {
-                const username = tg.user.first_name || "Неизвестный пользователь"; // Если имя отсутствует, используем "Неизвестный пользователь"
+            const username = tg.user.username || "Неизвестный пользователь"; // Логин, если есть
+            const firstName = tg.user.first_name || "Неизвестный пользователь"; // Имя, если есть
             
-                // Обновляем заголовок <h1>
-                const userNameElement = document.getElementById('user-name');
-                userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
+            const userNameElement = document.getElementById('user-name');
+            
+            if (username !== "Неизвестный пользователь") {
+                userNameElement.textContent = `Привет, @${username}! Хотите получить сигналы?`;
             } else {
-                // Если не в Telegram, отображаем "Неизвестный пользователь"
-                const userNameElement = document.getElementById('user-name');
-                userNameElement.textContent = `Неизвестный пользователь, хочешь получить сигналы на основе fund rate?`;
+                userNameElement.textContent = `Привет, ${firstName}! Хотите получить сигналы?`;
             }
         }
 
@@ -156,6 +144,12 @@
             fetchSignals();
         }
 
+        // Вызов функции после инициализации WebApp
+        tg.ready();
+        tg.onEvent('ready', () => {
+            setUsername();
+            tg.expand();  // Расширяем приложение на весь экран
+        });
     </script>
 
 </body>
