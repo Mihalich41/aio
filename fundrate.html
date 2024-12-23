@@ -75,6 +75,15 @@
         .hidden {
             display: none;
         }
+
+        /* Стили для блоков с сигналами и кнопками */
+        #signals-container {
+            margin-top: 20px;
+        }
+
+        #buttons-container {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -82,14 +91,10 @@
     <h1 id="user-name">Загрузка...</h1>
     <h2>Бот ищет монеты с наибольшим показателем fund rate. И дает сигналы на покупку или продажу.</h2>
 
-    <!-- Кнопки выбора категории -->
-    <div id="buttons-container">
-        <button class="category-btn" id="largeCapBtn">Топ 10 монет</button>
-        <button class="category-btn" id="midCapBtn">Средняя капитализация</button>
-        <button class="category-btn" id="smallCapBtn">Монеты с 30 по 99</button>
-    </div>
-
     <!-- Блок для отображения сигнала и анимации загрузки -->
+    <div id="signals-container"></div>
+
+    <!-- Блок с индикатором загрузки -->
     <div id="loading-container" class="hidden">
         <div class="loading">
             Загрузка сигналов...
@@ -97,7 +102,12 @@
         </div>
     </div>
 
-    <div id="signals-container"></div>
+    <!-- Кнопки выбора категории -->
+    <div id="buttons-container">
+        <button class="category-btn" id="largeCapBtn">Топ 10 монет</button>
+        <button class="category-btn" id="midCapBtn">Средняя капитализация</button>
+        <button class="category-btn" id="smallCapBtn">Монеты с 30 по 99</button>
+    </div>
 
     <script>
         // Функция для получения имени пользователя из Telegram
