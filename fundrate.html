@@ -7,17 +7,12 @@
     <link rel="stylesheet" href="styles.css">
     <title>Финансовые сигналы</title>
     <style>
-        :root {
-            --tg-theme-secondary-bg-color: #f1f1f1; /* Установите значение по умолчанию для переменной */
-        }
-
         .signal {
             border: 1px solid #ccc;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: var(--tg-theme-secondary-bg-color); /* Фон сигнала */
         }
         .signal .title {
             font-size: 20px;
@@ -55,7 +50,6 @@
             background-color: #ddd;
             cursor: not-allowed;
         }
-
         /* Анимация загрузки */
         .loading {
             text-align: center;
@@ -95,8 +89,8 @@
         /* Плавное появление и исчезновение блока с сигналами */
         .fade-container {
             opacity: 0;
+            transition: opacity 1.5s ease-in-out;
             visibility: hidden;
-            transition: opacity 1.5s ease-in-out, visibility 0s 1.5s;
         }
         .fade-container.visible {
             opacity: 1;
@@ -218,32 +212,42 @@
             });
 
             // Плавно отображаем контейнер с сигналами
-            container.classList.remove('fade-out');
             container.classList.add('visible');
 
             // Плавно показываем кнопки после загрузки
             const buttonsContainer = document.getElementById('buttons-container');
             buttonsContainer.classList.add('visible');
             document.getElementById('loading-container').classList.add('hidden');
+
+            // Включаем кнопки
+            enableButtons();
         }
 
-        // Функция для скрытия блока сигналов и загрузки новых данных (1.5 секунды)
+        // Включаем кнопки после получения сигналов
+        function enableButtons() {
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(button => button.disabled = false);
+        }
+
+        // Функция для получения сигналов по категории
         async function getSignalsByCategory(category) {
             const buttons = document.querySelectorAll('.category-btn');
-            const signalsContainer = document.getElementById('signals-container');
             const loadingContainer = document.getElementById('loading-container');
             const buttonsContainer = document.getElementById('buttons-container');
+            const signalsContainer = document.getElementById('signals-container');
 
-            // Отключаем кнопки и показываем индикатор загрузки
-            buttons.forEach(button => button.disabled = true);
+            // Отключаем кнопки и скрываем блок сигналов с анимацией
+            signalsContainer.classList.add('fade-out'); // Скрываем блок сигналов
 
-            // Плавно скрываем блок с сигналами
-            signalsContainer.classList.remove('visible');
-            signalsContainer.classList.add('fade-out');
+            // После того как блок сигналов исчезнет, показываем загрузку
+            setTimeout(() => {
+                loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
+                buttonsContainer.classList.remove('visible'); // Скрываем кнопки
+                buttons.forEach(button => button.disabled = true); // Отключаем кнопки
+            }, 1500); // Таймаут для скрытия блока сигналов (1.5 секунды)
 
-            setTimeout(async () => {
-                await fetchSignals(category); // Загружаем данные
-            }, 1500);
+            // Загружаем данные и отображаем их
+            await fetchSignals(category);
         }
 
         // Слушатели событий для кнопок
@@ -257,9 +261,11 @@
             const tg = window.Telegram.WebApp;
             tg.expand();  // Расширяем окно при открытии
 
-            // Плавно отображаем кнопки
-            const buttonsContainer = document.getElementById('buttons-container');
-            buttonsContainer.classList.add('visible');
+            // После 1 секунды запускаем анимацию появления кнопок
+            setTimeout(() => {
+                const buttonsContainer = document.getElementById('buttons-container');
+                buttonsContainer.classList.add('visible');
+            }, 1000);
         }
     </script>
 
