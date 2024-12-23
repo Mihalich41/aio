@@ -1,163 +1,70 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <title>Финансовые сигналы</title>
-    <style>
-        .signal {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .signal .title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .signal .funding-rate {
-            font-size: 18px;
-        }
-        .signal .price {
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        .signal .advice {
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .short-advice {
-            color: red;
-        }
-        .long-advice {
-            color: green;
-        }
-        #get-signals-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 20px 0;
-        }
-        #get-signals-btn:disabled {
-            background-color: #ddd;
-            cursor: not-allowed;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Торговые сигналы</title>
+  <style>
+    /* Добавляем немного стилей для кнопок */
+    button {
+      font-size: 16px;
+      padding: 10px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    .signal-list {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
+  <h1>Получить сигналы для торговых пар</h1>
 
-    <!-- Место для отображения имени пользователя -->
-    <h1 id="user-name">Загрузка...</h1> 
+  <!-- Кнопки для разных диапазонов монет -->
+  <button id="largeCapBtn">Топ 10 монет (Large Cap)</button>
+  <button id="midCapBtn">Монеты среднего размера (Mid Cap)</button>
+  <button id="smallCapBtn">Малые монеты (Small Cap)</button>
 
-    <!-- Кнопка для получения сигналов -->
-    <button id="get-signals-btn" onclick="getSignals()">Получить сигналы</button>
+  <!-- Блок для отображения сигналов -->
+  <div id="signals" class="signal-list"></div>
 
-    <div id="signals-container">
-        <!-- Здесь будут отображаться сигналы -->
-    </div>
+  <script>
+    // Функция для отображения сигналов на странице
+    function displaySignals(signals) {
+      const signalsContainer = document.getElementById('signals');
+      signalsContainer.innerHTML = '';  // Очищаем контейнер перед выводом новых сигналов
+      signals.forEach(signal => {
+        const signalElement = document.createElement('div');
+        signalElement.innerHTML = `
+          <p><strong>Символ:</strong> ${signal.symbol}</p>
+          <p><strong>Фондовый рейд:</strong> ${signal.fundingRate}</p>
+          <p><strong>Цена:</strong> ${signal.price}</p>
+          <hr>
+        `;
+        signalsContainer.appendChild(signalElement);
+      });
+    }
 
-    <script>
-        // Функция для получения имени пользователя из Telegram
-        function setUsername() {
-            const tg = window.Telegram.WebApp;
-
-            // Проверяем, доступен ли Telegram WebApp (работает ли в Telegram)
-            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                const user = tg.initDataUnsafe.user;
-                const username = user.first_name || "Неизвестный пользователь"; // Если имя отсутствует, используем "Неизвестный пользователь"
-
-                // Обновляем заголовок <h1> с именем пользователя
-                const userNameElement = document.getElementById('user-name');
-                userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
-            } else {
-                // Если не в Telegram, отображаем "Неизвестный пользователь"
-                const userNameElement = document.getElementById('user-name');
-                userNameElement.textContent = `Неизвестный пользователь, хочешь получить сигналы на основе fund rate?`;
-            }
+    // Функция для запроса сигнала для конкретной категории
+    async function fetchSignals(category) {
+      try {
+        const response = await fetch(`https://ваш-api-endpoint?category=${category}`);
+        const data = await response.json();
+        if (data && data.data) {
+          displaySignals(data.data);
+        } else {
+          document.getElementById('signals').innerHTML = 'Нет данных для отображения.';
         }
+      } catch (error) {
+        console.error('Ошибка при получении сигналов:', error);
+        document.getElementById('signals').innerHTML = 'Ошибка при получении данных.';
+      }
+    }
 
-        // Функция для получения сигналов с API
-        async function fetchSignals() {
-            try {
-                const response = await fetch('https://functions.yandexcloud.net/d4eqm47pjutco6k0d404'); // Замените на ваш URL
-                const data = await response.json();
-
-                if (data && data.data) {
-                    displaySignals(data.data);
-                } else {
-                    alert('Нет данных для отображения');
-                }
-            } catch (error) {
-                console.error('Ошибка при загрузке данных:', error);
-                alert('Ошибка при загрузке данных. Пожалуйста, попробуйте снова позже.');
-            }
-        }
-
-        // Функция для отображения сигналов
-        function displaySignals(signals) {
-            const container = document.getElementById('signals-container');
-            container.innerHTML = '';  // Очищаем контейнер перед выводом новых данных
-
-            signals.forEach(signal => {
-                const signalElement = document.createElement('div');
-                signalElement.classList.add('signal');
-
-                const signalTitle = document.createElement('div');
-                signalTitle.classList.add('title');
-                signalTitle.textContent = `${signal.symbol}`;
-
-                const priceElement = document.createElement('div');
-                priceElement.classList.add('price');
-                priceElement.textContent = `Цена: $${signal.price.toFixed(2)}`;
-
-                const fundingRateElement = document.createElement('div');
-                fundingRateElement.classList.add('funding-rate');
-                fundingRateElement.textContent = `Фондовый рейд: ${signal.fundingRate.toFixed(4)}`;
-
-                // Определяем текст совета в зависимости от фондового рейта
-                const adviceElement = document.createElement('div');
-                adviceElement.classList.add('advice');
-
-                if (signal.fundingRate > 0) {
-                    adviceElement.textContent = "Рейт положительный, ставим шорт";
-                    adviceElement.classList.add('short-advice');
-                } else {
-                    adviceElement.textContent = "Рейт отрицательный, ставим лонг";
-                    adviceElement.classList.add('long-advice');
-                }
-
-                // Добавляем все элементы в блок
-                signalElement.appendChild(signalTitle);
-                signalElement.appendChild(priceElement);  // Сначала цена
-                signalElement.appendChild(fundingRateElement);  // Потом фондовый рейд
-                signalElement.appendChild(adviceElement);
-
-                container.appendChild(signalElement);
-            });
-        }
-
-        // Функция, вызываемая при нажатии кнопки
-        function getSignals() {
-            // Отключаем кнопку, чтобы избежать повторных нажатий
-            const button = document.getElementById('get-signals-btn');
-            button.disabled = true;
-
-            // Получаем сигналы и отображаем их
-            fetchSignals();
-        }
-
-        // Запускаем функцию получения данных при загрузке страницы
-        window.onload = function() {
-            setUsername(); // Устанавливаем имя пользователя
-        }
-    </script>
-
+    // Слушатели событий для кнопок
+    document.getElementById('largeCapBtn').addEventListener('click', () => fetchSignals('largeCap'));
+    document.getElementById('midCapBtn').addEventListener('click', () => fetchSignals('midCap'));
+    document.getElementById('smallCapBtn').addEventListener('click', () => fetchSignals('smallCap'));
+  </script>
 </body>
 </html>
