@@ -245,8 +245,9 @@
                 loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
                 buttonsContainer.classList.remove('visible'); // Скрываем кнопки
                 buttons.forEach(button => button.disabled = true); // Отключаем кнопки
-            }, 1500); // Таймаут для скрытия блока сигналов (1.5 секунды)
-            signalsContainer.classList.remove('visible'); 
+                signalsContainer.classList.remove('visible');
+            }, 1500);
+              
             // Загружаем данные и отображаем их
             await fetchSignals(category);
 
