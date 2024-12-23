@@ -70,12 +70,14 @@
         function setUsername() {
             const tg = window.Telegram.WebApp;
 
-            // Получаем имя пользователя
-            const username = tg.user.first_name || "Пользователь"; // Если имя отсутствует, используем "Пользователь"
+            // Убедимся, что объект Telegram WebApp доступен
+            if (tg && tg.user) {
+                const username = tg.user.first_name || "Пользователь"; // Если имя отсутствует, используем "Пользователь"
             
-            // Обновляем заголовок <h1>
-            const userNameElement = document.getElementById('user-name');
-            userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
+                // Обновляем заголовок <h1>
+                const userNameElement = document.getElementById('user-name');
+                userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
+            }
         }
 
         // Функция для получения сигналов с API
