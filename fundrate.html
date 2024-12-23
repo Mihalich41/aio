@@ -80,10 +80,21 @@
         /* Плавное появление кнопок */
         .fade-in {
             opacity: 0;
-            transition: opacity 3s ease-in-out;
+            transition: opacity 2s ease-in-out;
         }
         .fade-in.visible {
             opacity: 1;
+        }
+
+        /* Плавное появление и исчезновение блока с сигналами */
+        .fade-container {
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            visibility: hidden;
+        }
+        .fade-container.visible {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Стили для блоков с сигналами и кнопками */
@@ -102,7 +113,7 @@
     <h2>Бот ищет монеты с наибольшим показателем fund rate. И дает сигналы на покупку или продажу.</h2>
 
     <!-- Блок для отображения сигнала и анимации загрузки -->
-    <div id="signals-container"></div>
+    <div id="signals-container" class="fade-container"></div>
 
     <!-- Блок с индикатором загрузки -->
     <div id="loading-container" class="hidden">
@@ -198,6 +209,9 @@
             buttonsContainer.classList.add('visible'); // Кнопки становятся видимыми после загрузки
             document.getElementById('loading-container').classList.add('hidden');
             enableButtons();  // Включаем кнопки после загрузки сигналов
+
+            // Плавно отображаем контейнер с сигналами
+            container.classList.add('visible');
         }
 
         // Включаем кнопки после получения сигналов
@@ -211,10 +225,12 @@
             const buttons = document.querySelectorAll('.category-btn');
             const loadingContainer = document.getElementById('loading-container');
             const buttonsContainer = document.getElementById('buttons-container');
+            const signalsContainer = document.getElementById('signals-container');
 
             // Отключаем кнопки и показываем индикатор загрузки
             buttons.forEach(button => button.disabled = true);
             buttonsContainer.classList.remove('visible'); // Скрываем кнопки
+            signalsContainer.classList.remove('visible'); // Скрываем блок с сигналами
             loadingContainer.classList.remove('hidden');
 
             // Загружаем данные и отображаем их
