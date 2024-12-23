@@ -261,11 +261,9 @@
             const tg = window.Telegram.WebApp;
             tg.expand();  // Расширяем окно при открытии
 
-            // После 1 секунды запускаем анимацию появления кнопок
-            setTimeout(() => {
-                const buttonsContainer = document.getElementById('buttons-container');
-                buttonsContainer.classList.add('visible');
-            }, 1000);
+            // Плавно отображаем кнопки
+            const buttonsContainer = document.getElementById('buttons-container');
+            buttonsContainer.classList.add('visible');
         }
     </script>
 
