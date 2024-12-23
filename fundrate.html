@@ -19,12 +19,14 @@
     <script>
         async function fetchSignals() {
             try {
-                const response = await fetch('http://localhost:3000/api/funding-rate');
+                // URL вашей Яндекс Функции для получения данных
+                const response = await fetch('https://functions.yandexcloud.net/d4eqm47pjutco6k0d404');
                 const data = await response.json();
 
                 const signalsContainer = document.getElementById('signals');
                 signalsContainer.innerHTML = ''; // Очищаем предыдущие данные
 
+                // Обработка данных и отображение
                 data.pairs.forEach(pair => {
                     const signalElement = document.createElement('div');
                     signalElement.classList.add(pair.signal); // Добавляем класс для правильного отображения цвета
