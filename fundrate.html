@@ -28,17 +28,20 @@
         }
         .signal .funding-rate {
             font-size: 18px;
-            color: #ff6b6b;
         }
         .signal .price {
             font-size: 16px;
             margin-top: 10px;
         }
-        .long {
-            color: green;
+        .signal .advice {
+            font-size: 16px;
+            font-weight: bold;
         }
-        .short {
+        .short-advice {
             color: red;
+        }
+        .long-advice {
+            color: green;
         }
     </style>
 </head>
@@ -89,13 +92,23 @@
             priceElement.classList.add('price');
             priceElement.textContent = `Цена: $${signal.price.toFixed(2)}`;
 
-            // Определяем, что это "Long" или "Short" на основе фонда
-            const signalType = signal.fundingRate > 0 ? 'long' : 'short';
-            signalElement.classList.add(signalType);
+            // Определяем текст совета в зависимости от фондового рейта
+            const adviceElement = document.createElement('div');
+            adviceElement.classList.add('advice');
 
+            if (signal.fundingRate > 0) {
+                adviceElement.textContent = "Рейт положительный, ставим шорт";
+                adviceElement.classList.add('short-advice');
+            } else {
+                adviceElement.textContent = "Рейт отрицательный, ставим лонг";
+                adviceElement.classList.add('long-advice');
+            }
+
+            // Добавляем все элементы в блок
             signalElement.appendChild(signalTitle);
             signalElement.appendChild(fundingRateElement);
             signalElement.appendChild(priceElement);
+            signalElement.appendChild(adviceElement);
 
             container.appendChild(signalElement);
         });
