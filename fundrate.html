@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="styles.css">
     <title>Финансовые сигналы</title>
     <style>
-
         .signal {
             background-color: #fff;
             border: 1px solid #ccc;
@@ -70,13 +69,17 @@
         function setUsername() {
             const tg = window.Telegram.WebApp;
 
-            // Убедимся, что объект Telegram WebApp доступен
+            // Проверяем, доступен ли Telegram WebApp (работает ли в Telegram)
             if (tg && tg.user) {
                 const username = tg.user.first_name || "Пользователь"; // Если имя отсутствует, используем "Пользователь"
             
                 // Обновляем заголовок <h1>
                 const userNameElement = document.getElementById('user-name');
                 userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
+            } else {
+                // Если не в Telegram, отображаем "Пользователь"
+                const userNameElement = document.getElementById('user-name');
+                userNameElement.textContent = `Пользователь, хочешь получить сигналы на основе fund rate?`;
             }
         }
 
