@@ -123,7 +123,7 @@
     <div id="signals-container" class="fade-container"></div>
 
     <!-- Блок с индикатором загрузки -->
-    <div id="loading-container" class="fade-out hidden">
+    <div id="loading-container" class="hidden">
         <div class="loading">
             Загрузка сигналов...
             <div class="spinner"></div>
@@ -238,9 +238,7 @@
             const signalsContainer = document.getElementById('signals-container');
 
            
-          //  signalsContainer.classList.add('fade-out'); 
-
-            // После того как блок сигналов исчезнет, показываем загрузку
+                  // После того как блок сигналов исчезнет, показываем загрузку
 
                 loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
                 buttonsContainer.classList.remove('visible'); // Скрываем кнопки
