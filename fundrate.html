@@ -49,16 +49,52 @@
             background-color: #ddd;
             cursor: not-allowed;
         }
+        /* Анимация загрузки */
+        .loading {
+            text-align: center;
+            font-size: 18px;
+            color: #4CAF50;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Скрыть кнопки во время загрузки */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <h1 id="user-name">Загрузка...</h1> 
-<h2>Бот ищет монеты с наибольшим показателем fund rate. И дает сигналы на покупку или продажу.</h2>
-    <div>
+    <h1 id="user-name">Загрузка...</h1>
+    <h2>Бот ищет монеты с наибольшим показателем fund rate. И дает сигналы на покупку или продажу.</h2>
+
+    <!-- Кнопки выбора категории -->
+    <div id="buttons-container">
         <button class="category-btn" id="largeCapBtn">Топ 10 монет</button>
         <button class="category-btn" id="midCapBtn">Средняя капитализация</button>
         <button class="category-btn" id="smallCapBtn">Монеты с 30 по 99</button>
+    </div>
+
+    <!-- Блок для отображения сигнала и анимации загрузки -->
+    <div id="loading-container" class="hidden">
+        <div class="loading">
+            Загрузка сигналов...
+            <div class="spinner"></div>
+        </div>
     </div>
 
     <div id="signals-container"></div>
@@ -100,7 +136,7 @@
         // Функция для отображения сигналов
         function displaySignals(signals) {
             const container = document.getElementById('signals-container');
-            container.innerHTML = '';  
+            container.innerHTML = '';  // Очищаем контейнер перед добавлением нового сигнала
 
             signals.forEach(signal => {
                 const signalElement = document.createElement('div');
@@ -136,20 +172,25 @@
 
                 container.appendChild(signalElement);
             });
+
+            // Возвращаем кнопки обратно на место и скрываем индикатор загрузки
+            document.getElementById('loading-container').classList.add('hidden');
+            document.getElementById('buttons-container').classList.remove('hidden');
         }
 
         // Функция для получения сигналов по категории
         async function getSignalsByCategory(category) {
             const buttons = document.querySelectorAll('.category-btn');
+            const loadingContainer = document.getElementById('loading-container');
+            const buttonsContainer = document.getElementById('buttons-container');
 
-            // Отключаем все кнопки после начала запроса
+            // Отключаем кнопки и показываем индикатор загрузки
             buttons.forEach(button => button.disabled = true);
+            buttonsContainer.classList.add('hidden');
+            loadingContainer.classList.remove('hidden');
 
             // Загружаем данные и отображаем их
             await fetchSignals(category);
-
-            // Включаем кнопки обратно после загрузки данных
-            buttons.forEach(button => button.disabled = false);
         }
 
         // Слушатели событий для кнопок
