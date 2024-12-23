@@ -55,7 +55,7 @@
 </head>
 <body>
 
-    <h1 id="user-name">Загрузка...</h1> <!-- Место для отображения имени пользователя -->
+    <h1 id="user-name">Неизвестный пользователь</h1> <!-- Место для отображения имени пользователя -->
 
     <!-- Кнопка для получения сигналов -->
     <button id="get-signals-btn" onclick="getSignals()">Получить сигналы</button>
@@ -71,15 +71,15 @@
 
             // Проверяем, доступен ли Telegram WebApp (работает ли в Telegram)
             if (tg && tg.user) {
-                const username = tg.user.first_name || "Пользователь"; // Если имя отсутствует, используем "Пользователь"
+                const username = tg.user.first_name || "Неизвестный пользователь"; // Если имя отсутствует, используем "Неизвестный пользователь"
             
                 // Обновляем заголовок <h1>
                 const userNameElement = document.getElementById('user-name');
                 userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
             } else {
-                // Если не в Telegram, отображаем "Пользователь"
+                // Если не в Telegram, отображаем "Неизвестный пользователь"
                 const userNameElement = document.getElementById('user-name');
-                userNameElement.textContent = `Пользователь, хочешь получить сигналы на основе fund rate?`;
+                userNameElement.textContent = `Неизвестный пользователь, хочешь получить сигналы на основе fund rate?`;
             }
         }
 
