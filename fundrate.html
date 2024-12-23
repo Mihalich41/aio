@@ -55,6 +55,7 @@
             background-color: #ddd;
             cursor: not-allowed;
         }
+
         /* Анимация загрузки */
         .loading {
             text-align: center;
@@ -217,6 +218,7 @@
             });
 
             // Плавно отображаем контейнер с сигналами
+            container.classList.remove('fade-out');
             container.classList.add('visible');
 
             // Плавно показываем кнопки после загрузки
@@ -236,6 +238,7 @@
             buttons.forEach(button => button.disabled = true);
 
             // Плавно скрываем блок с сигналами
+            signalsContainer.classList.remove('visible');
             signalsContainer.classList.add('fade-out');
 
             setTimeout(async () => {
