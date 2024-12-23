@@ -80,7 +80,7 @@
         /* Плавное появление кнопок */
         .fade-in {
             opacity: 0;
-            transition: opacity 3s ease;
+            transition: opacity 3s ease-in-out;
         }
         .fade-in.visible {
             opacity: 1;
@@ -113,7 +113,7 @@
     </div>
 
     <!-- Кнопки выбора категории -->
-    <div id="buttons-container" class="fade-in visible">
+    <div id="buttons-container" class="fade-in">
         <button class="category-btn" id="largeCapBtn">Топ 10 монет</button>
         <button class="category-btn" id="midCapBtn">Средняя капитализация</button>
         <button class="category-btn" id="smallCapBtn">Монеты с 30 по 99</button>
@@ -197,6 +197,13 @@
             const buttonsContainer = document.getElementById('buttons-container');
             buttonsContainer.classList.add('visible'); // Кнопки становятся видимыми после загрузки
             document.getElementById('loading-container').classList.add('hidden');
+            enableButtons();  // Включаем кнопки после загрузки сигналов
+        }
+
+        // Включаем кнопки после получения сигналов
+        function enableButtons() {
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(button => button.disabled = false);
         }
 
         // Функция для получения сигналов по категории
@@ -223,9 +230,4 @@
         window.onload = function() {
             setUsername(); // Устанавливаем имя пользователя
             const tg = window.Telegram.WebApp;
-            tg.expand();  // Расширяем окно при открытии
-        }
-    </script>
-
-</body>
-</html>
+            tg.expand();  // Рас
