@@ -97,9 +97,12 @@
         }
 
 // Функция для отображения сигналов
+
 function displaySignals(signals) {
     const container = document.getElementById('signals-container');
     container.innerHTML = '';  // Очищаем контейнер перед выводом новых данных
+
+    console.log('Received signals:', signals);  // Логируем полученные сигналы
 
     if (signals.length > 0) {
         const signal = signals[0];  // Мы получаем только одну монету с максимальным фондовым рейтом
@@ -147,6 +150,7 @@ function displaySignals(signals) {
         container.innerHTML = '<p>Нет данных для отображения</p>';
     }
 }
+
 
 
         function getSignalsByCategory(category) {
