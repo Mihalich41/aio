@@ -139,8 +139,12 @@
 
     <script>
         // Функция для получения имени пользователя из Telegram
+
+        const tg = window.Telegram.WebApp;
+        const WhoskSignalLogin = tg.initDataUnsafe.username || "Гость";
+
+    
         function setUsername() {
-            const tg = window.Telegram.WebApp;
 
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
@@ -153,7 +157,6 @@
                 userNameElement.textContent = `Неизвестный пользователь, хочешь получить сигналы на основе fund rate?`;
             }
         }
-        const WhoskSignalLogin = window.Telegram.WebApp.initDataUnsafe.username || "Гость";
         // Функция для получения сигналов с API
         async function fetchSignals(category, WhoskSignalLogin) {
             try {
@@ -260,7 +263,6 @@
         // Расширение окна при загрузке страницы
         window.onload = function() {
             setUsername(); // Устанавливаем имя пользователя
-            const tg = window.Telegram.WebApp;
             tg.expand();  // Расширяем окно при открытии
 
         const buttonsContainer = document.getElementById('buttons-container');
