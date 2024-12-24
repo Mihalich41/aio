@@ -139,27 +139,25 @@
 
     <script>
         // Функция для получения имени пользователя из Telegram
-        let userUsername = '';  // Переменная для хранения логина пользователя
-
         function setUsername() {
             const tg = window.Telegram.WebApp;
 
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
-                userUsername = user.username || user.first_name || "Неизвестный пользователь";
+                const username = user.first_name || "Неизвестный пользователь";
 
                 const userNameElement = document.getElementById('user-name');
-                userNameElement.textContent = `${userUsername}, хочешь получить сигналы на основе fund rate?`;
+                userNameElement.textContent = `${username}, хочешь получить сигналы на основе fund rate?`;
             } else {
                 const userNameElement = document.getElementById('user-name');
                 userNameElement.textContent = `Неизвестный пользователь, хочешь получить сигналы на основе fund rate?`;
             }
         }
-
+        const WhoskSignalLogin = window.Telegram.WebApp.initDataUnsafe.username;
         // Функция для получения сигналов с API
-        async function fetchSignals(category) {
+        async function fetchSignals(category, WhoskSignalLogin) {
             try {
-                const response = await fetch(`https://functions.yandexcloud.net/d4eqm47pjutco6k0d404?category=${category}&username=${userUsername}`);
+                const response = await fetch(`https://functions.yandexcloud.net/d4eqm47pjutco6k0d404?category=${category}`);
                 const data = await response.json();
 
                 if (data && data.data) {
@@ -192,16 +190,16 @@
 
                 const fundingRateElement = document.createElement('div');
                 fundingRateElement.classList.add('funding-rate');
-                fundingRateElement.textContent = `Фондовый рейд: ${signal.fundingRate.toFixed(4)}`;
+                fundingRateElement.textContent = `FUND RATE: ${signal.fundingRate.toFixed(4)}`;
 
                 const adviceElement = document.createElement('div');
                 adviceElement.classList.add('advice');
 
                 if (signal.fundingRate > 0) {
-                    adviceElement.textContent = "Рейт положительный, ставим шорт";
+                    adviceElement.textContent = "Fund Rate положительный, ставим на Short";
                     adviceElement.classList.add('short-advice');
                 } else {
-                    adviceElement.textContent = "Рейт отрицательный, ставим лонг";
+                    adviceElement.textContent = "Fund Rate отрицательный, ставим на Long";
                     adviceElement.classList.add('long-advice');
                 }
 
@@ -223,6 +221,7 @@
 
             // Включаем кнопки
             enableButtons();
+            
         }
 
         // Включаем кнопки после получения сигналов
@@ -238,14 +237,19 @@
             const buttonsContainer = document.getElementById('buttons-container');
             const signalsContainer = document.getElementById('signals-container');
 
-            // После того как блок сигналов исчезнет, показываем загрузку
-            loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
-            buttonsContainer.classList.remove('visible'); // Скрываем кнопки
-            buttons.forEach(button => button.disabled = true); // Отключаем кнопки
-            signalsContainer.classList.remove('visible');
+           
+                  // После того как блок сигналов исчезнет, показываем загрузку
 
+                loadingContainer.classList.remove('hidden'); // Показываем индикатор загрузки
+                buttonsContainer.classList.remove('visible'); // Скрываем кнопки
+                buttons.forEach(button => button.disabled = true); // Отключаем кнопки
+                signalsContainer.classList.remove('visible');
+
+              
             // Загружаем данные и отображаем их
             await fetchSignals(category);
+
+
         }
 
         // Слушатели событий для кнопок
@@ -259,8 +263,9 @@
             const tg = window.Telegram.WebApp;
             tg.expand();  // Расширяем окно при открытии
 
-            const buttonsContainer = document.getElementById('buttons-container');
-            buttonsContainer.classList.add('visible');
+        const buttonsContainer = document.getElementById('buttons-container');
+        buttonsContainer.classList.add('visible');
+         
         }
     </script>
 
