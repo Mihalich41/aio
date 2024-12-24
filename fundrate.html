@@ -153,7 +153,7 @@
                 userNameElement.textContent = `Неизвестный пользователь, хочешь получить сигналы на основе fund rate?`;
             }
         }
-        const WhoskSignalLogin = window.Telegram.WebApp.initDataUnsafe.username;
+        const WhoskSignalLogin = window.Telegram.WebApp.initDataUnsafe.username || "Гость";
         // Функция для получения сигналов с API
         async function fetchSignals(category, WhoskSignalLogin) {
             try {
@@ -247,7 +247,7 @@
 
               
             // Загружаем данные и отображаем их
-            await fetchSignals(category);
+            await fetchSignals(category, WhoskSignalLogin);
 
 
         }
