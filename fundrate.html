@@ -141,28 +141,35 @@
         // Функция для получения имени пользователя из Telegram
 
         const tg = window.Telegram.WebApp;
-        const WhoskSignalLogin = tg.initDataUnsafe.user.username || "Гость";
 
-    
+        function detectUser() {
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                return tg.initDataUnsafe.user.username;
+            } else {
+                return "Гость";
+            }
+        }
+        const WhoskSignalLogin = detectUser();
+
         function setUsername() {
 
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
-                const username = user.first_name || "Неизвестный пользователь";
+                const FirstName = user.first_name || "Неизвестный пользователь";
 
                 const userNameElement = document.getElementById('user-name');
-                userNameElement.textContent = `${username}, ${WhoskSignalLogin}хочешь получить сигналы на основе fund rate?`;
+                userNameElement.textContent = `${FirstName} , хочешь получить сигналы на основе fund rate?`;
             } else {
                 const userNameElement = document.getElementById('user-name');
                 userNameElement.textContent = `Неизвестный пользователь, хочешь получить сигналы на основе fund rate?`;
             }
         }
         // Функция для получения сигналов с API
-        async function fetchSignals(category, WhoskSignalLogin) {
+        async function fetchSignals(category) {
             try {
-                const response = await fetch(`https://functions.yandexcloud.net/d4eqm47pjutco6k0d404?category=${category}`);
+                 
+                const response = await fetch(`https://functions.yandexcloud.net/d4eqm47pjutco6k0d404?category=${category}&WhoskSignalLogin=${WhoskSignalLogin}`);
                 const data = await response.json();
-
                 if (data && data.data) {
                     displaySignals(data.data);
                 } else {
@@ -250,7 +257,7 @@
 
               
             // Загружаем данные и отображаем их
-            await fetchSignals(category, WhoskSignalLogin);
+            await fetchSignals(category);
 
 
         }
